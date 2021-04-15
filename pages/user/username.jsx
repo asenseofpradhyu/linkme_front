@@ -13,7 +13,8 @@ const Username = (props) => {
 
   const [session, loading] = useSession()
 	const router = useRouter()
-  const { data } = props;
+  const { res } = props;
+  console.log(res.name +"**"+res.email);
 
     useEffect(() => {
 		if(!loading && !session?.accessToken) {
@@ -29,7 +30,7 @@ const Username = (props) => {
 
     return ( 
         <div>
-			<h1>Welcome {data.user.name}</h1>
+			<h1>Welcome {res.name}</h1>
             <Button type="button" onClick={() => signOut({redirect: false, callbackUrl: "/login"})}>Log Out</Button>
 		</div>
      )
@@ -39,12 +40,12 @@ const Username = (props) => {
 
 export async function getStaticProps() {
  
-	const data = await axios.get(API_URL + 'user')
+	const user = await axios.get(API_URL + 'user')
   .then(res => res.data)
   .catch(err => err)
 
   return {
-    props: {data} // will be passed to the page component as props
+    props: {res: user.user,} // will be passed to the page component as props
   }
 }
 
