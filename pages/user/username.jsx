@@ -45,7 +45,7 @@ export async function getStaticProps() {
   .catch(err => err)
 
   return {
-    props: {res: user.user,} // will be passed to the page component as props
+    props: {res: user.user || null} // will be passed to the page component as props
   }
 }
 
