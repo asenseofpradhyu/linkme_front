@@ -79,20 +79,24 @@ export default function Login() {
           })
 
       res.then(function (response){
-        if(response.error && !response.url){
+        if(response.error){
 
           setLoginError(response.error);
           setSubmitting(false);
           console.log(response);
 
-        } else if(response.url && !response.error){
+        } else if(response.status == 200 && response.ok){
           
           setTimeout(
             function() {
               router.push('username')
           }.bind(this), 300);
           console.log(response);
+        } else {
+          setLoginError('Something Went Wrong..!!');
+          setSubmitting(false);
         }
+        
       });
       }
     });

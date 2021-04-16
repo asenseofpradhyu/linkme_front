@@ -26,6 +26,7 @@ const providers = [
 
         if (user) {
           axios.defaults.headers.common['Authorization'] = "Bearer "+user.data.token;
+          console.log(user.data.token);
           return {status: 'success', data: user.data.token}
         } 
       } catch (e) {
@@ -55,7 +56,6 @@ const callbacks = {
 }
 
 const options = {
-  site: process.env.NEXTAUTH_URL,
   providers,
   callbacks,
   pages: {

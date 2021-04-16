@@ -16,7 +16,6 @@ const Username = (props) => {
   // const { user } = props;
   const [user, setUser] = useState(props.user);
   
-console.log(user.user.name);
     useEffect(() => {
 		if(!loading && !session?.accessToken) {
       router.push('login')
@@ -37,10 +36,8 @@ console.log(user.user.name);
      )
 }
 
-export async function getServerSideProps(context) {
-
+export async function getServerSideProps() {
   const {data} = await axios.get(API_URL + 'user');
-
   return {
     props: {user:data}, // will be passed to the page component as props
   }
