@@ -25,7 +25,7 @@ const providers = [
         })
 
         if (user) {
-          axios.defaults.headers.common['Authorization'] = "Bearer " + user.data.token;
+          axios.defaults.headers.common['Authorization'] = "Bearer "+user.data.token;
           return {status: 'success', data: user.data.token}
         } 
       } catch (e) {
