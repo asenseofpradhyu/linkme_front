@@ -25,10 +25,10 @@ const providers = [
         })
 
         if (user) {
-          axios.defaults.headers.common['Authorization'] = "Bearer "+user.data.token;
-          console.log(user.data.token);
+          // axios.defaults.headers.common['Authorization'] = "Bearer "+user.data.token;
+          // console.log(user.data.token);
           return {status: 'success', data: user.data.token}
-        } 
+        }
       } catch (e) {
         console.log(e);
         const errorMessage = e.response.data.message

@@ -1,4 +1,4 @@
-import { useSession, signOut } from 'next-auth/client'
+import { useSession, signOut, getSession  } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Button, Spinner } from "@chakra-ui/react";
@@ -36,8 +36,11 @@ const Username = (props) => {
      )
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
+  const sessionData = await getSession(context);
+  axios.defaults.headers.common['Authorization'] = "Bearer "+sessionData.accessToken;
   const {data} = await axios.get(API_URL + 'user');
+  console.log(sessionData);
   return {
     props: {user:data}, // will be passed to the page component as props
   }
