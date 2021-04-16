@@ -10,7 +10,7 @@ export default class Document extends NextDocument {
       <Html lang="en">
       <Head>
       <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
-        </Head>
+      </Head>
         <body>
           <ColorModeScript initialColorMode={customTheme.config.initialColorMode} />
           <Main />

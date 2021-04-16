@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import { Flex, Link } from "@chakra-ui/react";
 
 // Local File Imports
