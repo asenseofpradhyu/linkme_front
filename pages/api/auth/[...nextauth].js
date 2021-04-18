@@ -51,6 +51,7 @@ const callbacks = {
 
   async session(session, token) {
     session.accessToken = token.accessToken;
+    console.log(session);
     return session
   }
 }

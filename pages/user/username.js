@@ -37,13 +37,14 @@ const Username = (props) => {
 }
 
 export async function getServerSideProps(context) {
+
   const sessionData = await getSession(context);
   axios.defaults.headers.common['Authorization'] = "Bearer "+sessionData.accessToken;
   const {data} = await axios.get(API_URL + 'user');
-  console.log(sessionData);
   return {
     props: {user:data}, // will be passed to the page component as props
   }
+  
 }
 
 export default Username;
