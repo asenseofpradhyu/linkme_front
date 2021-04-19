@@ -57,6 +57,7 @@ const callbacks = {
 }
 
 const options = {
+  site:process.env.NEXTAUTH_URL,
   providers,
   callbacks,
   pages: {
