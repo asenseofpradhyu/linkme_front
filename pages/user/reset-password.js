@@ -10,10 +10,12 @@ import { API_URL } from '../../_helper/config';
 import Utility from '../../_helper/util';
 
 
-const Register = () => {
+const ResetPassword = () => {
 
 
-    const router = useRouter()
+    const router = useRouter();
+    const {token, email} = router.query;
+    console.log(router.query);
     const {
         values,
         handleSubmit,
@@ -27,36 +29,33 @@ const Register = () => {
         setFieldValue
       } = useFormik({
         initialValues: {
-          email: "",
-          name:"",
-          password: ""
+          password: "",
+          c_password:""
         },
         validationSchema: Yup.object().shape({
-          email: Yup.string()
-            .email("Invalid email address")
-            .required("Required"),
-            name: Yup.string()
-            .required("Required")
-            .matches(/^[A-Z][a-z]+\s[A-Z][a-z]+$/, "Must be only Alphabet"),
           password: Yup.string()
+            .min(6, "Must be more than 6 characters")
+            .required("Required"),
+            c_password: Yup.string()
             .min(6, "Must be more than 6 characters")
             .required("Required")
         }),
         onSubmit(values) {
-          axios.post(API_URL+'register', {
-            name: values.name,
-            email: values.email,
-            password: values.password
+            console.log("Password:- "+values.password+" C Password:- "+values.c_password + " Token:- "+token+" Email:- "+email);
+          axios.post(API_URL+'password/reset', {
+            token: token,
+            email: email,
+            password: values.password,
+            confirm_password: values.c_password,
           })
           .then(function (response) {
-            Utility.setToken(response.data.token);
-            setTimeout(
-              function() {
-                router.push('/user/login')
-              }
-              .bind(this),
-              300
-          );
+          //   setTimeout(
+          //     function() {
+          //       router.push('/user/login')
+          //     }
+          //     .bind(this),
+          //     300
+          // );
             setSubmitting(false);
             console.log(response);
           })
@@ -72,27 +71,11 @@ const Register = () => {
         <Flex width="100%" height="100vh" align="center" justifyContent="center">
     <Box p={8} maxWidth="650px" width="100%" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
-            <Heading> Register </Heading>
+            <Heading> Reset Password </Heading>
         </Box>
         <Box my={4} textAlign="left">
         
             <form onSubmit={handleSubmit}>
-            <FormControl isRequired  isInvalid={ touched["name"] && errors["name"] }>
-                    <FormLabel>Name</FormLabel>
-                    <Input type="text" 
-                    id="Name" 
-                        placeholder="John Doe"
-                        size="lg" {...getFieldProps("name")}/>
-                  <FormErrorMessage>{touched["name"] && errors["name"]}</FormErrorMessage>
-                </FormControl>
-                <FormControl isRequired mt={6} isInvalid={ touched["email"] && errors["email"] }>
-                    <FormLabel> Email </FormLabel>
-                    <Input type="text" 
-                    id="email" 
-                        placeholder="example@example.com"
-                        size="lg" {...getFieldProps("email")}/>
-                  <FormErrorMessage>{touched["email"] && errors["email"]}</FormErrorMessage>
-                </FormControl>
                 <FormControl isRequired mt={6} isInvalid={ touched["password"] && errors["password"] }>
                     <FormLabel> Password </FormLabel>
                     <Input type="password" 
@@ -101,7 +84,15 @@ const Register = () => {
                         size="lg" {...getFieldProps("password")}/>
                         <FormErrorMessage>{touched["password"] && errors["password"]}</FormErrorMessage>
                 </FormControl>
-                <Button width="full" mt={4} type="submit" isLoading={isSubmitting}>Register</Button>
+                <FormControl isRequired mt={6} isInvalid={ touched["c_password"] && errors["c_password"] }>
+                    <FormLabel> Confirm Password </FormLabel>
+                    <Input type="password" 
+                    id="password" 
+                        placeholder="********"
+                        size="lg" {...getFieldProps("c_password")}/>
+                        <FormErrorMessage>{touched["c_password"] && errors["c_password"]}</FormErrorMessage>
+                </FormControl>
+                <Button width="full" mt={4} type="submit" isLoading={isSubmitting}>Reset Password</Button>
             </form>
         </Box>
     </Box>
@@ -109,4 +100,4 @@ const Register = () => {
      );
 }
  
-export default Register;
+export default ResetPassword;

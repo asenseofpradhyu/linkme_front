@@ -10,6 +10,7 @@ const axios = require('axios');
 // Local File Imports
 import { API_URL } from '../../_helper/config';
 import Utility from '../../_helper/util';
+import ForgotPassword from './forgot_password';
 
 
 export default function Login() {
@@ -134,7 +135,8 @@ export default function Login() {
                 </Button>
                 <span>{loginError}</span>
             </form>
-            <Link href="register" mt={4}>Register</Link>
+            <Link href="register" mt={4} mr={2}>Register</Link>
+            <Link href="forgot_password" mt={4}>ForgotPassword</Link>
         </Box>
     </Box>
 </Flex>
