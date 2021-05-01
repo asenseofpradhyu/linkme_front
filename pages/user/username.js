@@ -1,7 +1,10 @@
 import { useSession, signOut, getSession  } from 'next-auth/client'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { Button, Spinner } from "@chakra-ui/react";
+import { Button, Spinner, Link, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
+import {
+  
+} from "@chakra-ui/react"
 const axios = require('axios');
 
 // Local File Imports
@@ -40,10 +43,21 @@ const Username = ({user}) => {
     console.log("Test");
   };
 
+  const toChangePassword = () => {
+    router.push("change_password");
+  }
+
     return ( 
         <div>
-			<h1>Welcome {userData.user.name}</h1>
-            <Button type="button" onClick={logOut}>Log Out</Button>
+			<h1>Welcome</h1>
+      <Menu>
+  <MenuButton as={Button}>{userData.user.name + " >"} </MenuButton>
+  <MenuList>
+    <MenuItem onClick={toChangePassword}>Change Password</MenuItem>
+    <MenuItem onClick={logOut}>Logout</MenuItem>
+  </MenuList>
+</Menu>
+            {/* <Button type="button" onClick={logOut}>Log Out</Button> */}
 		</div>
      )
 }

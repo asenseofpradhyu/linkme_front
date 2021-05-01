@@ -41,7 +41,7 @@ const ResetPassword = () => {
             .required("Required")
         }),
         onSubmit(values) {
-            console.log("Password:- "+values.password+" C Password:- "+values.c_password + " Token:- "+token+" Email:- "+email);
+            
           axios.post(API_URL+'password/reset', {
             token: token,
             email: email,
