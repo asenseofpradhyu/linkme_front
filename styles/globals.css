@@ -2,8 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: #0C0B0B !important;
 }
 
 a {
@@ -13,4 +12,45 @@ a {
 
 * {
   box-sizing: border-box;
+}
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color:    #0C0B0B !important;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+ color:    #0C0B0B !important;
+ opacity:  1 !important;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+ color:    #0C0B0B !important;
+ opacity:  1 !important;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color:    #0C0B0B !important;
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+ color:    #0C0B0B !important;
+}
+
+::placeholder { /* Most modern browsers support this now. */
+ color:    #0C0B0B !important;
+}
+input, select, textarea{
+  color: #0C0B0B;
+  background: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
+input:focus, select:focus, textarea:focus{
+  box-shadow: 0 0 0 1px #0C0B0B !important;
+}
+button{
+  background: #0C0B0B !important;
+  color:#ffffff !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+}
+button:hover, button:focus, button:active { 
+  background-color: #0C0B0B;
+  outline: none;
+  box-shadow: none !important;
 }

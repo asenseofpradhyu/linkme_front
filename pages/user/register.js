@@ -49,7 +49,6 @@ const Register = () => {
             password: values.password
           })
           .then(function (response) {
-            Utility.setToken(response.data.token);
             setTimeout(
               function() {
                 router.push('/user/login')

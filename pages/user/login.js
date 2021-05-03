@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as Yup from 'yup'
-import { Flex, Box, Heading, Link, FormControl, FormLabel, Input, Button, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Heading, Container, Center, Link, FormControl, Text, Input, Button, FormErrorMessage, Flex } from "@chakra-ui/react";
 import { Formik, useFormik } from 'formik';
 import { useState, useEffect } from 'react'
 import { signIn, useSession } from 'next-auth/client'
@@ -106,39 +106,89 @@ export default function Login() {
 
   return (
 
-    <Flex width="100%" height="100vh" align="center" justifyContent="center">
-    <Box p={8} maxWidth="650px" width="100%" borderWidth={1} borderRadius={8} boxShadow="lg">
-        <Box textAlign="center">
-            <Heading> Login </Heading>
-        </Box>
-        <Box my={4} textAlign="left">
-        
-            <form onSubmit={handleSubmit}>
-                <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
-                    <FormLabel> Email </FormLabel>
-                    <Input type="text" 
-                    id="email" 
+
+    
+
+<Container maxW="container.xl" >
+  <Box>
+    <Center><Heading fontSize="36px" mt="122px">Sign in to your Linko account</Heading></Center>
+  </Box>
+  <Center>
+  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p="78px 168px" w='638px' mt="79px">
+    <Box>
+    <form onSubmit={handleSubmit}>
+                       <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
+                     <Input 
+                        type="text" 
+                        id="email" 
                         placeholder="example@example.com"
-                        size="lg" {...getFieldProps("email")}/>
+                        h="40px"
+                        {...getFieldProps("email")}
+                        />
                   <FormErrorMessage>{touched["email"] && errors["email"]}</FormErrorMessage>
                 </FormControl>
-                <FormControl isRequired mt={6} isInvalid={ touched["password"] && errors["password"] }>
-                    <FormLabel> Password </FormLabel>
-                    <Input type="password" 
-                    id="password" 
-                        placeholder="********"
-                        size="lg" {...getFieldProps("password")}/>
+                <FormControl isRequired mt="23px" isInvalid={ touched["password"] && errors["password"] }>
+                    <Input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Password"
+                        h="40px" 
+                        {...getFieldProps("password")}/>
                         <FormErrorMessage>{touched["password"] && errors["password"]}</FormErrorMessage>
                 </FormControl>
-                <Button width="full" mt={4} type="submit" isLoading={isSubmitting}>
-                Login
-                </Button>
+                <Center>
+                <Button width="120px" mt="34px" type="submit" isLoading={isSubmitting}>Login</Button>
+                </Center>
+                <Center>
+                <Link href="forgot_password" fontSize="12px" mt="10px">ForgotPassword?</Link>
+                </Center>
+                <Center>
+                <Text fontSize="14px" mt="38px">Don't have an account?{" "}<Link href="register" fontWeight="extrabold">Create one</Link></Text>
+                </Center>
                 <span>{loginError}</span>
             </form>
-            <Link href="register" mt={4} mr={2}>Register</Link>
-            <Link href="forgot_password" mt={4}>ForgotPassword</Link>
-        </Box>
     </Box>
-</Flex>
+    </Box>
+  </Center>
+</Container>
+
+
+
+
+
+//     <Flex width="100%" height="100vh" align="center" justifyContent="center">
+//     <Box p={8} maxWidth="650px" width="100%" borderWidth={1} borderRadius={8} boxShadow="lg">
+//         <Box textAlign="center">
+//             <Heading> Login </Heading>
+//         </Box>
+//         <Box my={4} textAlign="left">
+        
+//             <form onSubmit={handleSubmit}>
+//                 <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
+//                     <FormLabel> Email </FormLabel>
+//                     <Input type="text" 
+//                     id="email" 
+//                         placeholder="example@example.com"
+//                         size="lg" {...getFieldProps("email")}/>
+//                   <FormErrorMessage>{touched["email"] && errors["email"]}</FormErrorMessage>
+//                 </FormControl>
+//                 <FormControl isRequired mt={6} isInvalid={ touched["password"] && errors["password"] }>
+//                     <FormLabel> Password </FormLabel>
+//                     <Input type="password" 
+//                     id="password" 
+//                         placeholder="********"
+//                         size="lg" {...getFieldProps("password")}/>
+//                         <FormErrorMessage>{touched["password"] && errors["password"]}</FormErrorMessage>
+//                 </FormControl>
+//                 <Button width="full" mt={4} type="submit" isLoading={isSubmitting}>
+//                 Login
+//                 </Button>
+//                 <span>{loginError}</span>
+//             </form>
+//             <Link href="register" mt={4} mr={2}>Register</Link>
+//             <Link href="forgot_password" mt={4}>ForgotPassword</Link>
+//         </Box>
+//     </Box>
+// </Flex>
   )
 }

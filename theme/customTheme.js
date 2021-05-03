@@ -1,22 +1,33 @@
-// theme.js
-
-// 1. import `extendTheme` function
+import { theme as chakraTheme } from '@chakra-ui/react'
 import { extendTheme } from "@chakra-ui/react"
+import { createBreakpoints } from "@chakra-ui/theme-tools"
+import { mode } from "@chakra-ui/theme-tools"
 
-// 2. Add your color mode config
+
+// Config
 const config = {
-    brand: {
-      900: "#1a365d",
-      800: "#153e75",
-      700: "#2a69ac",
-    },
-    mode:{
+  mode:{
       initialColorMode: "light",
-    useSystemColorMode: false,
-    }
-  }
+      useSystemColorMode: false,
+    },
+    cssVarPrefix: "linkme",
+}
+
+// Fonts
+const fonts = {
+  ...chakraTheme.fonts,
+  body: `'Roboto', sans-serif`,
+  heading: `'Baloo_Bhai'`
+}
+
+// Overrides
+const overrides = {
+    ...chakraTheme,
+    fonts,
+    config
+}
 
 // 3. extend the theme
-const customTheme = extendTheme({ config })
+const customTheme = extendTheme(overrides)
 
 export default customTheme;
