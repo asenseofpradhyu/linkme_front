@@ -34,6 +34,7 @@ a {
 ::placeholder { /* Most modern browsers support this now. */
  color:    #0C0B0B !important;
 }
+/* Input Control */
 input, select, textarea{
   color: #0C0B0B;
   background: #ffffff !important;
@@ -48,9 +49,18 @@ button{
   color:#ffffff !important;
   border-radius: 8px !important;
   font-size: 13px !important;
+  font-weight: 700 !important;
 }
 button:hover, button:focus, button:active { 
   background-color: #0C0B0B;
   outline: none;
+  box-shadow: none !important;
+}
+.chakra-checkbox__control{
+  border-color: #0C0B0B !important;
+  border-radius: 50% !important;
+  background: #0C0B0B !important;
+}
+.chakra-checkbox__control:focus{
   box-shadow: none !important;
 }

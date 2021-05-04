@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as Yup from 'yup'
-import { Flex, Box, Heading, FormControl, FormLabel, Input, Button, FormErrorMessage } from "@chakra-ui/react";
+import { Flex, Box, Container, Center, Heading, FormControl, FormLabel, Input, Button, FormErrorMessage } from "@chakra-ui/react";
 import { Formik, useFormik } from 'formik';
 const axios = require('axios');
 
@@ -58,28 +58,60 @@ const ForgotPassword = () => {
 
 
     return ( 
-        <Flex width="100%" height="100vh" align="center" justifyContent="center">
-    <Box p={8} maxWidth="650px" width="100%" borderWidth={1} borderRadius={8} boxShadow="lg">
-        <Box textAlign="center">
-            <Heading> Forgot Password </Heading>
-        </Box>
-        <Box my={4} textAlign="left">
-        
-            <form onSubmit={handleSubmit}>
-            
-                <FormControl isRequired mt={6} isInvalid={ touched["email"] && errors["email"] }>
-                    <FormLabel> Email </FormLabel>
-                    <Input type="text" 
-                    id="email" 
-                        placeholder="example@example.com"
-                        size="lg" {...getFieldProps("email")}/>
+
+
+      <Container maxW="container.xl" h="100%">
+<Flex width="100%" h="100vh" align="center" flexDirection={["column","column"]} justifyContent="center">
+  <Box>
+    <Center><Heading fontSize={["24px","32px","36px","36px"]}>Forgot Password?</Heading></Center>
+  </Box>
+  
+  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
+    <Box>
+    <form onSubmit={handleSubmit}>
+                       <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
+                     <Input 
+                        type="text" 
+                        id="email" 
+                        placeholder="Email"
+                        h="40px"
+                        {...getFieldProps("email")}
+                        />
                   <FormErrorMessage>{touched["email"] && errors["email"]}</FormErrorMessage>
                 </FormControl>
-                <Button width="full" mt={4} type="submit" isLoading={isSubmitting}>Send Reset Link</Button>
+                <Center flexDirection={["column","column"]}>
+                <Button width="auto" mt={"34px"} type="submit" isLoading={isSubmitting}>Send Reset Link</Button>
+                </Center>
             </form>
-        </Box>
     </Box>
-</Flex>
+    </Box>
+  </Flex>
+</Container>
+
+
+
+//         <Flex width="100%" height="100vh" align="center" justifyContent="center">
+//     <Box p={8} maxWidth="650px" width="100%" borderWidth={1} borderRadius={8} boxShadow="lg">
+//         <Box textAlign="center">
+//             <Heading> Forgot Password </Heading>
+//         </Box>
+//         <Box my={4} textAlign="left">
+        
+//             <form onSubmit={handleSubmit}>
+            
+//                 <FormControl isRequired mt={6} isInvalid={ touched["email"] && errors["email"] }>
+//                     <FormLabel> Email </FormLabel>
+//                     <Input type="text" 
+//                     id="email" 
+//                         placeholder="example@example.com"
+//                         size="lg" {...getFieldProps("email")}/>
+//                   <FormErrorMessage>{touched["email"] && errors["email"]}</FormErrorMessage>
+//                 </FormControl>
+//                 <Button width="full" mt={4} type="submit" isLoading={isSubmitting}>Send Reset Link</Button>
+//             </form>
+//         </Box>
+//     </Box>
+// </Flex>
      );
 }
  

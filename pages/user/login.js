@@ -109,19 +109,20 @@ export default function Login() {
 
     
 
-<Container maxW="container.xl" >
+<Container maxW="container.xl" h="100%">
+<Flex width="100%" h="100vh" align="center" flexDirection={["column","column"]} justifyContent="center">
   <Box>
-    <Center><Heading fontSize="36px" mt="122px">Sign in to your Linko account</Heading></Center>
+    <Center><Heading fontSize={["24px","32px","36px","36px"]}>Sign in to your Linko account</Heading></Center>
   </Box>
-  <Center>
-  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p="78px 168px" w='638px' mt="79px">
+  
+  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
     <Box>
     <form onSubmit={handleSubmit}>
                        <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
                      <Input 
                         type="text" 
                         id="email" 
-                        placeholder="example@example.com"
+                        placeholder="Email"
                         h="40px"
                         {...getFieldProps("email")}
                         />
@@ -136,20 +137,20 @@ export default function Login() {
                         {...getFieldProps("password")}/>
                         <FormErrorMessage>{touched["password"] && errors["password"]}</FormErrorMessage>
                 </FormControl>
-                <Center>
-                <Button width="120px" mt="34px" type="submit" isLoading={isSubmitting}>Login</Button>
+                <Center flexDirection={["column","column"]}>
+                <Text fontSize="14px" color="red" mt="10px">{loginError}</Text>
+                <Button width="120px" mt={loginError ? "20px" : "34px"} type="submit" isLoading={isSubmitting}>Sign in</Button>
                 </Center>
                 <Center>
-                <Link href="forgot_password" fontSize="12px" mt="10px">ForgotPassword?</Link>
+                <Link href="forgot_password" fontSize="14px" mt="10px">ForgotPassword?</Link>
                 </Center>
                 <Center>
                 <Text fontSize="14px" mt="38px">Don't have an account?{" "}<Link href="register" fontWeight="extrabold">Create one</Link></Text>
                 </Center>
-                <span>{loginError}</span>
             </form>
     </Box>
     </Box>
-  </Center>
+  </Flex>
 </Container>
 
 
