@@ -1,7 +1,6 @@
-import Head from 'next/head'
-import { useRouter } from 'next/router'
+import { useState } from 'react'
 import * as Yup from 'yup'
-import { Flex, Box, Container, Center, Heading, FormControl, FormLabel, Input, Button, FormErrorMessage } from "@chakra-ui/react";
+import { Flex, Box, Container, Center, Heading, FormControl, Text, Input, Button, FormErrorMessage } from "@chakra-ui/react";
 import { Formik, useFormik } from 'formik';
 const axios = require('axios');
 
@@ -12,8 +11,8 @@ import Utility from '../../_helper/util';
 
 const ForgotPassword = () => {
 
+  const [apiMessage, setApiMessage] = useState();
 
-    const router = useRouter()
     const {
         values,
         handleSubmit,
@@ -39,15 +38,9 @@ const ForgotPassword = () => {
             email: values.email
           })
           .then(function (response) {
-        //     setTimeout(
-        //       function() {
-        //         router.push('/user/login')
-        //       }
-        //       .bind(this),
-        //       300
-        //   );
+            setApiMessage(response.data.message);
             setSubmitting(false);
-            console.log(response);
+            console.log(response.data.message);
           })
           .catch(function (error) {
             setSubmitting(false);
@@ -66,7 +59,7 @@ const ForgotPassword = () => {
     <Center><Heading fontSize={["24px","32px","36px","36px"]}>Forgot Password?</Heading></Center>
   </Box>
   
-  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
+  <Box borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
     <Box>
     <form onSubmit={handleSubmit}>
                        <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
@@ -80,7 +73,8 @@ const ForgotPassword = () => {
                   <FormErrorMessage>{touched["email"] && errors["email"]}</FormErrorMessage>
                 </FormControl>
                 <Center flexDirection={["column","column"]}>
-                <Button width="auto" mt={"34px"} type="submit" isLoading={isSubmitting}>Send Reset Link</Button>
+                  <Text mt="10px" mb="10px">{apiMessage}</Text>
+                <Button width="auto" mt={"34px"} type="submit" isLoading={isSubmitting}>Send reset link</Button>
                 </Center>
             </form>
     </Box>

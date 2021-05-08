@@ -115,7 +115,7 @@ export default function Login() {
     <Center><Heading fontSize={["24px","32px","36px","36px"]}>Sign in to your Linko account</Heading></Center>
   </Box>
   
-  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
+  <Box borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
     <Box>
     <form onSubmit={handleSubmit}>
                        <FormControl isRequired isInvalid={ touched["email"] && errors["email"] }>
@@ -142,7 +142,7 @@ export default function Login() {
                 <Button width="120px" mt={loginError ? "20px" : "34px"} type="submit" isLoading={isSubmitting}>Sign in</Button>
                 </Center>
                 <Center>
-                <Link href="forgot_password" fontSize="14px" mt="10px">ForgotPassword?</Link>
+                <Link href="forgot_password" fontSize="14px" mt="10px">Forgot Password?</Link>
                 </Center>
                 <Center>
                 <Text fontSize="14px" mt="38px">Don't have an account?{" "}<Link href="register" fontWeight="extrabold">Create one</Link></Text>

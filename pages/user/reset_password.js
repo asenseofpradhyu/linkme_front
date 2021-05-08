@@ -1,7 +1,8 @@
 import Head from 'next/head'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import * as Yup from 'yup'
-import { Flex, Box, Container, Center, Heading, FormControl, FormLabel, Input, Button, FormErrorMessage } from "@chakra-ui/react";
+import { Flex, Box, Container, Center, Heading, FormControl, Text, Input, Button, FormErrorMessage } from "@chakra-ui/react";
 import { Formik, useFormik } from 'formik';
 const axios = require('axios');
 
@@ -14,8 +15,9 @@ const ResetPassword = () => {
 
 
     const router = useRouter();
+    const [apiMessage, setApiMessage] = useState();
     const {token, email} = router.query;
-    console.log(router.query);
+    
     const {
         values,
         handleSubmit,
@@ -49,13 +51,7 @@ const ResetPassword = () => {
             confirm_password: values.c_password,
           })
           .then(function (response) {
-          //   setTimeout(
-          //     function() {
-          //       router.push('/user/login')
-          //     }
-          //     .bind(this),
-          //     300
-          // );
+            setApiMessage(response.data.message);
             setSubmitting(false);
             console.log(response);
           })
@@ -76,7 +72,7 @@ const ResetPassword = () => {
     <Center><Heading fontSize={["24px","32px","36px","36px"]}>Reset Password</Heading></Center>
   </Box>
   
-  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
+  <Box borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">
     <Box>
     <form onSubmit={handleSubmit}>
                 <FormControl isRequired mt="23px" isInvalid={ touched["password"] && errors["password"] }>
@@ -91,13 +87,14 @@ const ResetPassword = () => {
                 <FormControl isRequired mt={6} isInvalid={ touched["c_password"] && errors["c_password"] }>
                      <Input 
                         type="password" 
-                        id="password" 
+                        id="c_password" 
                         placeholder="Confirm Password"
                         h="40px" 
                         {...getFieldProps("c_password")}/>
                          <FormErrorMessage>{touched["c_password"] && errors["c_password"]}</FormErrorMessage>
                 </FormControl>
                 <Center flexDirection={["column","column"]}>
+                <Text color="green" mt="10px" mb="10px">{apiMessage}</Text>
                 <Button width="120px" mt={"34px"} type="submit" isLoading={isSubmitting}>Reset Password</Button>
                 </Center>
                 

@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { useSession, signOut, getSession  } from 'next-auth/client'
 import * as Yup from 'yup'
@@ -8,25 +8,19 @@ const axios = require('axios');
 
 // Local File Imports
 import { API_URL } from '../../_helper/config';
-import Utility from '../../_helper/util';
+import Auth from '../../component/Auth'
 
 
 const ChangePassword = () => {
 
     const [session, loading] = useSession();
+    const router = useRouter();
     const [apiMessage, setApiMessage] = useState('')
 
     useEffect(() => {
 
-    if(loading || !session?.accessToken){
-        return(
-            <Spinner color="red.500" size="lg"/>
-        );
-    };
-		if((!loading && !session?.accessToken)) {
-            router.push('login');
-		}
-	})
+console.log("Change");
+	});
 
 
 
@@ -84,6 +78,9 @@ const ChangePassword = () => {
 
 
     return ( 
+      <>
+      {(!session?.accessToken) ? <Auth/> : 
+
         <Flex width="100%" height="100vh" align="center" justifyContent="center">
     <Box p={8} maxWidth="650px" width="100%" borderWidth={1} borderRadius={8} boxShadow="lg">
         <Box textAlign="center">
@@ -122,6 +119,8 @@ const ChangePassword = () => {
         </Box>
     </Box>
 </Flex>
+ }
+</>
      );
 }
  

@@ -81,7 +81,7 @@ const Register = () => {
     </Center>
   </Box>
   
-  <Box borderWidth="1px" borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','638px','638px']} mt="79px">
+  <Box borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','638px','638px']} mt="79px">
     <Box>
     <form onSubmit={handleSubmit}>
                 <FormControl isRequired  isInvalid={ touched["name"] && errors["name"] }>
@@ -111,7 +111,7 @@ const Register = () => {
                         <FormErrorMessage>{touched["password"] && errors["password"]}</FormErrorMessage>
                  </FormControl>
                  <FormControl isRequired isInvalid={ touched["terms_policy"] && errors["terms_policy"]}>
-                    <Checkbox size="lg" mt={"25px"} {...getFieldProps("terms_policy")}><Text fontSize="11px">By creating an account you are agreeing to our <Link href="#">Terms and Conditions</Link> and <Link href="#">Privacy Policy</Link></Text></Checkbox>
+                    <Checkbox size="lg" mt={"25px"} {...getFieldProps("terms_policy")}><Text fontSize="10px">By creating an account you are agreeing to our <Link href="#">Terms and Conditions</Link> and <Link href="#">Privacy Policy</Link></Text></Checkbox>
                     <FormErrorMessage>{touched["terms_policy"] && errors["terms_policy"]}</FormErrorMessage>
                  </FormControl>
                 <Center>

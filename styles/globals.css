@@ -40,27 +40,32 @@ input, select, textarea{
   background: #ffffff !important;
   border: none !important;
   border-radius: 8px !important;
+  font-size: 14px !important;
 }
 input:focus, select:focus, textarea:focus{
   box-shadow: 0 0 0 1px #0C0B0B !important;
 }
-button{
+button[type="submit"]{
   background: #0C0B0B !important;
   color:#ffffff !important;
   border-radius: 8px !important;
   font-size: 13px !important;
   font-weight: 700 !important;
 }
-button:hover, button:focus, button:active { 
+button[type="submit"]:hover, button[type="submit"]:focus, button[type="submit"]:active { 
   background-color: #0C0B0B;
   outline: none;
   box-shadow: none !important;
 }
 .chakra-checkbox__control{
-  border-color: #0C0B0B !important;
+  border-color: #FFFFFF !important;
   border-radius: 50% !important;
-  background: #0C0B0B !important;
+  background: #FFFFFF !important;
 }
-.chakra-checkbox__control:focus{
+.chakra-checkbox__control:focus, .chakra-checkbox__control[data-focus]{
   box-shadow: none !important;
+}
+.chakra-checkbox__control[aria-checked=true], .chakra-checkbox__control[data-checked]{
+  border-color: #0C0B0B !important;
+  background: #0C0B0B !important;
 }

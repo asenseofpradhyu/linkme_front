@@ -9,7 +9,7 @@ const axios = require('axios');
 
 // Local File Imports
 import { API_URL } from '../../_helper/config';
-import Utility from '../../_helper/util';
+import Auth from '../../component/Auth'
 
 
 const Username = ({user}) => {
@@ -17,30 +17,10 @@ const Username = ({user}) => {
   const [session, loading] = useSession();
 	const router = useRouter();
   const [userData, setUserData] = useState(user);
-  
-    useEffect(() => {
-		if((!loading && !session?.accessToken)) {
-      router.push('login');
-		} else if(user == null){
-      router.push('login');
-
-    }
-    console.log("Loading "+loading);
-    console.log("Session "+JSON.stringify(session));
-    console.log("user "+JSON.stringify(user));
-	})
-
-  if(loading || !session?.accessToken){
-    // (user == null || !userData)
-    return(
-      <Spinner color="red.500" size="lg"/>
-    );
-  };
 
   const logOut = () => {
-    signOut({redirect: false, callbackUrl: "/login"});
-    router.push('login');
-    console.log("Test");
+    signOut({redirect: false, callbackUrl: "/"});
+    router.replace("/");
   };
 
   const toChangePassword = () => {
@@ -48,6 +28,8 @@ const Username = ({user}) => {
   }
 
     return ( 
+      <>
+      {(!session?.accessToken) ? <Auth/> : 
         <div>
 			<h1>Welcome</h1>
       <Menu>
@@ -59,6 +41,8 @@ const Username = ({user}) => {
 </Menu>
             {/* <Button type="button" onClick={logOut}>Log Out</Button> */}
 		</div>
+}
+    </>
      )
 }
 
