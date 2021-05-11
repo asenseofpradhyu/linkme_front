@@ -38,7 +38,7 @@ const Register = () => {
             .required("Required"),
             name: Yup.string()
             .required("Required")
-            .matches(/^[A-Z][a-z]+\s[A-Z][a-z]+$/, "Must be only Alphabet"),
+            .matches(/^[a-zA-Z0-9._]+$/, "Username is invalid"),
           password: Yup.string()
             .min(6, "Must be more than 6 characters")
             .required("Required"),
@@ -72,8 +72,8 @@ const Register = () => {
 
     return ( 
 
-<Container maxW="container.xl" h="100%">
-<Flex width="100%" h="100vh" align="center" flexDirection={["column","column"]} justifyContent="center">
+<Container maxW="container.xl" h="100%" minHeight="100vh" d="flex" flexDirection={["column","column"]} justifyContent="center">
+<Flex width="100%" h="100%" align="center" flexDirection={["column","column"]} justifyContent="center">
   <Box>
     <Center flexDirection={["column","column"]}>
       <Heading fontSize={["24px","32px","36px","36px"]}>Create an account for free.</Heading>
