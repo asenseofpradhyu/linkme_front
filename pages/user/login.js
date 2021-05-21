@@ -109,8 +109,8 @@ export default function Login() {
 
     
 
-<Container maxW="container.xl" h="100%">
-<Flex width="100%" h="100vh" align="center" flexDirection={["column","column"]} justifyContent="center">
+<Container maxW="container.xl" h="100%" minHeight="100vh" d="flex" flexDirection={["column","column"]} justifyContent="center">
+<Flex width="100%" h="100%" align="center" flexDirection={["column","column"]} justifyContent="center">
   <Box>
     <Center><Heading fontSize={["24px","32px","36px","36px"]}>Sign in to your Linko account</Heading></Center>
   </Box>

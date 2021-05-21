@@ -19,7 +19,7 @@ const ChangePassword = () => {
 
     useEffect(() => {
 
-console.log("Change");
+console.log(session?.accessToken);
 	});
 
 
