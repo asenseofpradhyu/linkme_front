@@ -45,14 +45,15 @@ input, select, textarea{
 input:focus, select:focus, textarea:focus{
   box-shadow: 0 0 0 1px #0C0B0B !important;
 }
-button[type="submit"]{
+button[type="submit"], button[type="button"]{
   background: #0C0B0B !important;
   color:#ffffff !important;
   border-radius: 8px !important;
-  font-size: 13px !important;
+  font-size: 13px;
   font-weight: 700 !important;
 }
-button[type="submit"]:hover, button[type="submit"]:focus, button[type="submit"]:active { 
+button[type="submit"]:hover, button[type="submit"]:focus, button[type="submit"]:active,
+button[type="button"]:hover, button[type="button"]:focus, button[type="button"]:active { 
   background-color: #0C0B0B;
   outline: none;
   box-shadow: none !important;
@@ -68,4 +69,12 @@ button[type="submit"]:hover, button[type="submit"]:focus, button[type="submit"]:
 .chakra-checkbox__control[aria-checked=true], .chakra-checkbox__control[data-checked]{
   border-color: #0C0B0B !important;
   background: #0C0B0B !important;
+}
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+.add-links-section .add-link-btn{
+  font-size: 16px !important;
 }

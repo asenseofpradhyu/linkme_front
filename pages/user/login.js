@@ -91,6 +91,7 @@ export default function Login() {
           setTimeout(
             function() {
               router.push('username')
+              // router.push("/admin/dashboard");
           }.bind(this), 300);
           console.log(response);
         } else {
@@ -112,7 +113,7 @@ export default function Login() {
 <Container maxW="container.xl" h="100%" minHeight="100vh" d="flex" flexDirection={["column","column"]} justifyContent="center">
 <Flex width="100%" h="100%" align="center" flexDirection={["column","column"]} justifyContent="center">
   <Box>
-    <Center><Heading fontSize={["24px","32px","36px","36px"]}>Sign in to your Linko account</Heading></Center>
+    <Center><Heading fontSize={["24px","32px","36px","36px"]}>Sign in to your Linkwynk account</Heading></Center>
   </Box>
   
   <Box borderRadius="14px" overflow="hidden" bg="#F5F5F7" p={["20px 20px", "78px 168px", "78px 168px", "78px 168px"]} w={['100%','638px','725px','725px']} mt="79px">

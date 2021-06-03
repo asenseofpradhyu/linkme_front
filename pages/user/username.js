@@ -47,6 +47,30 @@ const Username = ({user}) => {
       email: "wvalek3@vk.com",
       gender: "Male",
       ip_address: "67.76.188.26"
+    },
+    {
+      id: 2,
+      first_name: "Giavani",
+      last_name: "Frediani",
+      email: "gfrediani1@senate.gov",
+      gender: "Male",
+      ip_address: "229.179.4.212"
+    },
+    {
+      id: 3,
+      first_name: "Noell",
+      last_name: "Bea",
+      email: "nbea2@imageshack.us",
+      gender: "Female",
+      ip_address: "180.66.162.255"
+    },
+    {
+      id: 4,
+      first_name: "Willard",
+      last_name: "Valek",
+      email: "wvalek3@vk.com",
+      gender: "Male",
+      ip_address: "67.76.188.26"
     }
   ];
 
@@ -105,8 +129,8 @@ const Username = ({user}) => {
 
   <Box w={["100%", "100%", "607px", "607px"]} mt={["30px"]}>
     <Text fontWeight="700">Tell us about yourself</Text>
-    <Text display="inline">Select up to 3 categories that best describe your Linko.<br/>
-    We'll customise your Linko experience based on what you select.</Text>
+    <Text display="inline">Select up to 3 categories that best describe your Linkwynk.<br/>
+    We'll customise your Linkwynk experience based on what you select.</Text>
     <Text float="right" display="inline-block">{tagSelect} of 3</Text>
   </Box>
   <Box w={["100%", "100%", "607px", "607px"]} mt={["25px"]}>
