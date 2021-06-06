@@ -1,3 +1,4 @@
+/* Start of Global Style */
 html,
 body {
   padding: 0;
@@ -34,7 +35,22 @@ a {
 ::placeholder { /* Most modern browsers support this now. */
  color:    #0C0B0B !important;
 }
-/* Input Control */
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/* End of Global Style */
+
+/* Start of Font Theme Style*/
+.themeFont{
+  font-family: 'Baloo_Bhai';
+}
+/* End of Font Theme Style*/
+
+/* Start of Input Control Style */
 input, select, textarea{
   color: #0C0B0B;
   background: #ffffff !important;
@@ -45,19 +61,25 @@ input, select, textarea{
 input:focus, select:focus, textarea:focus{
   box-shadow: 0 0 0 1px #0C0B0B !important;
 }
-button[type="submit"], button[type="button"]{
+/* End of Input Control Style */
+
+/* Start of Button Style */
+.theme-button{
   background: #0C0B0B !important;
   color:#ffffff !important;
   border-radius: 8px !important;
   font-size: 13px;
   font-weight: 700 !important;
 }
-button[type="submit"]:hover, button[type="submit"]:focus, button[type="submit"]:active,
-button[type="button"]:hover, button[type="button"]:focus, button[type="button"]:active { 
+.theme-button:hover, .theme-button:focus, .theme-button:active,
+.theme-button:hover, .theme-button:focus, .theme-button:active { 
   background-color: #0C0B0B;
   outline: none;
   box-shadow: none !important;
 }
+/* End of Button Style */
+
+/* Start of Checkbox Style */
 .chakra-checkbox__control{
   border-color: #FFFFFF !important;
   border-radius: 50% !important;
@@ -70,11 +92,25 @@ button[type="button"]:hover, button[type="button"]:focus, button[type="button"]:
   border-color: #0C0B0B !important;
   background: #0C0B0B !important;
 }
-.clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
-}
+/* End of Checkbox Style */
+
+/* Start of Links Page Style */
 .add-links-section .add-link-btn{
   font-size: 16px !important;
 }
+.analtics-tabs .chakra-tabs__tab{
+  font-family: 'Baloo_Bhai';
+  opacity: 0.3;
+  outline: none;
+}
+.analtics-tabs .chakra-tabs__tab:focus, .analtics-tabs .chakra-tabs__tab[data-focus]{
+  box-shadow: none;
+}
+.links{
+  margin-bottom: 18px;
+}
+.editable-container .chakra-editable__input{
+  width: auto;
+  padding-left: 10px;
+}
+/* End of Links Page Style */

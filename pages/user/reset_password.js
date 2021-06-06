@@ -95,7 +95,7 @@ const ResetPassword = () => {
                 </FormControl>
                 <Center flexDirection={["column","column"]}>
                 <Text color="green" mt="10px" mb="10px">{apiMessage}</Text>
-                <Button width="120px" mt={"34px"} type="submit" isLoading={isSubmitting}>Reset Password</Button>
+                <Button className="theme-button" width="120px" mt={"34px"} type="submit" isLoading={isSubmitting}>Reset Password</Button>
                 </Center>
                 
             </form>

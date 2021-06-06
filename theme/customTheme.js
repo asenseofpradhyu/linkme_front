@@ -3,6 +3,9 @@ import { extendTheme } from "@chakra-ui/react"
 import { createBreakpoints } from "@chakra-ui/theme-tools"
 import { mode } from "@chakra-ui/theme-tools"
 
+// Component style overrides
+import Button from "./component/button"
+
 
 // Config
 const config = {
@@ -10,7 +13,7 @@ const config = {
       initialColorMode: "light",
       useSystemColorMode: false,
     },
-    cssVarPrefix: "linkme",
+    cssVarPrefix: "linkwynk",
 }
 
 // Fonts
@@ -20,11 +23,15 @@ const fonts = {
   heading: `'Baloo_Bhai'`
 }
 
+
 // Overrides
 const overrides = {
     ...chakraTheme,
     fonts,
-    config
+    config,
+    // components: {
+    //   Button,
+    // }
 }
 
 // 3. extend the theme

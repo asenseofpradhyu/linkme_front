@@ -140,7 +140,7 @@ export default function Login() {
                 </FormControl>
                 <Center flexDirection={["column","column"]}>
                 <Text fontSize="14px" color="red" mt="10px">{loginError}</Text>
-                <Button width="120px" mt={loginError ? "20px" : "34px"} type="submit" isLoading={isSubmitting}>Sign in</Button>
+                <Button className="theme-button" width="120px" mt={loginError ? "20px" : "34px"} type="submit" isLoading={isSubmitting}>Sign in</Button>
                 </Center>
                 <Center>
                 <Link href="forgot_password" fontSize="14px" mt="10px">Forgot Password?</Link>

@@ -145,7 +145,7 @@ const Username = ({user}) => {
   </Box>
   <Box w={["100%", "100%", "607px", "607px"]} mt={["30px"]}>
     <Center>
-      <Button width="120px" type="submit" onClick={logOut}>Logout</Button>
+      <Button className="theme-button" width="120px" type="submit" onClick={logOut}>Logout</Button>
     </Center>
   </Box>
 

@@ -115,7 +115,7 @@ const Register = () => {
                     <FormErrorMessage>{touched["terms_policy"] && errors["terms_policy"]}</FormErrorMessage>
                  </FormControl>
                 <Center>
-                <Button width="120px" mt="34px" type="submit" isLoading={isSubmitting}>Sign up now</Button>
+                <Button className="theme-button" width="120px" mt="34px" type="submit" isLoading={isSubmitting}>Sign up now</Button>
                 </Center>
                 </form>
                 <Center>

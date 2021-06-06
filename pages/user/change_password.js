@@ -114,7 +114,7 @@ console.log(session?.accessToken);
                         <FormErrorMessage>{touched["c_password"] && errors["c_password"]}</FormErrorMessage>
                 </FormControl>
                 {apiMessage}
-                <Button width="full" mt={4} type="submit" isLoading={isSubmitting} disabled={!(isValid && dirty)}>Update</Button>
+                <Button className="theme-button" width="full" mt={4} type="submit" isLoading={isSubmitting} disabled={!(isValid && dirty)}>Update</Button>
             </form>
         </Box>
     </Box>

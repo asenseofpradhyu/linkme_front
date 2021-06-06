@@ -74,7 +74,7 @@ const ForgotPassword = () => {
                 </FormControl>
                 <Center flexDirection={["column","column"]}>
                   <Text mt="10px" mb="10px">{apiMessage}</Text>
-                <Button width="auto" mt={"34px"} type="submit" isLoading={isSubmitting}>Send reset link</Button>
+                <Button className="theme-button" width="auto" mt={"34px"} type="submit" isLoading={isSubmitting}>Send reset link</Button>
                 </Center>
             </form>
     </Box>
