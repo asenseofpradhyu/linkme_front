@@ -94,6 +94,24 @@ input:focus, select:focus, textarea:focus{
 }
 /* End of Checkbox Style */
 
+/* Start of Toggle Switch Style */
+.toggle-link .chakra-switch__track, 
+.toggle-link .chakra-switch__thumb{
+  background: transparent;
+  border: 4px solid #0C0B0B;
+}
+.toggle-link .chakra-switch__track:focus, .toggle-link .chakra-switch__track[data-focus]{
+  box-shadow: none !important;
+}
+.toggle-link .chakra-switch__track[aria-checked=true], .toggle-link .chakra-switch__track[data-checked]{
+  background: #0C0B0B;
+}
+.toggle-link .chakra-switch__thumb[aria-checked=true], .toggle-link .chakra-switch__thumb[data-checked]{
+  border: 4px solid #FFFFFF;
+}
+/* End of Toggle Switch Style */
+
+
 /* Start of Links Page Style */
 .add-links-section .add-link-btn{
   font-size: 16px !important;
