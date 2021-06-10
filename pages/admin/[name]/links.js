@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { DragDropContext, Droppable, Draggable, resetServerContext } from 'react-beautiful-dnd';
-import { FiChevronDown, FiChevronUp, FiRepeat, FiCopy, FiEdit2, FiCheck, FiBell, FiShuffle, FiImage, FiZap, FiClock, FiLayers, FiXCircle } from "react-icons/fi";
+import { FiChevronDown, FiChevronUp, FiRepeat, FiClipboard, FiEdit2, FiCheck, FiBell, FiShuffle, FiImage, FiZap, FiClock, FiLayers, FiXCircle } from "react-icons/fi";
 import { Button, Spinner, Tag, Tooltip, useClipboard, Avatar, Link, Switch, Flex, Box, Spacer, Heading, Image, useDisclosure, useEditableControls, IconButton, Collapse, Tabs, TabList, TabPanels, Tab, TabPanel, Editable, EditableInput, EditablePreview ,Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
 
 // Local File Imports
@@ -98,8 +98,8 @@ const Links = () => {
         <SideNav />
         <Box w="calc(100% - 164px)"  padding={["24px 50px"]} position="relative" left="164px" >
            <Box className="links-dashboard">
-           <Flex>
-    <Box w="620px" h="100%">
+           <Flex className="row">
+    <Box className="col sm-8" h="100%">
             <Box className="dashboard-greeting" bg="#F5F5F7" width="100%" borderRadius="14px" position="relative" padding="46px 0px" marginTop="31px">
                <Box display="inline-block" marginLeft="30px">
                   <Heading fontSize={["24px","32px","36px","36px"]} isTruncated maxWidth="300px">Hello { name }!</Heading>
@@ -151,7 +151,7 @@ const Links = () => {
           labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'],
           datasets: [
             {
-              label: '# of votes',
+              label: 'Total',
               data: [12, 19, 3, 5, 2, 3, 10],
               borderColor: "#0C0B0B",
               borderWidth: 2,
@@ -162,10 +162,31 @@ const Links = () => {
             },
           ],
         }}
-        height={400}
-        width={600}
+        height={100}
         options={{
-          maintainAspectRatio: false,
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins:{
+            tooltip:{
+              callbacks: {
+                labelColor: function(context) {
+                    return {};
+                },
+                labelTextColor: function(context) {
+                    return '#FFFFFF';
+                },
+            },
+              backgroundColor: '#0C0B0B',
+              bodyColor:'#FFFFFF',
+              bodyFont:{
+                size: 16
+              },
+              bodySpacing:2,
+            }, 
+            legend: {
+              display: false
+                    },
+                 },
           scales: {
             yAxes: [
               {
@@ -289,8 +310,7 @@ const Links = () => {
             {/* End of Links Drag and Drop Section */}
         </Box>
        </Box>
-    <Spacer />
-    <Box w="400px" h="100%">
+    <Box className="col sm-4" h="100%">
       <Box className="link-preview-container" marginTop="31px">
           <Box className="notification-profile-dropdown" display="flex" alignItems="center" justifyContent="flex-end">
             <Box className="notification-bell" display="inline-block" boxSize="25px" marginRight="20px">
@@ -311,7 +331,7 @@ const Links = () => {
             </Menu>
             </Box>
           </Box>
-          <Box className="linkwynk-preview" marginTop="40px">
+          <Box className="linkwynk-preview" display="flex" justifyContent="center" marginTop="40px">
                 <Box className="mobile-design-frame" width="350px" height="calc(100vh - 25vh)"  border="solid #0C0B0B" borderWidth="8px 10px 8px 10px" borderRadius="40px">
 
                 </Box>
@@ -319,7 +339,7 @@ const Links = () => {
           <Box className="user-linkwynk-link" marginTop="30px" justifyContent="center" display="flex" alignItems="center">
                 <Text display="inline-block" fontWeight="700" fontSize="20px" marginRight="5px">My Linkwynk:</Text><Link fontSize="20px" href={"https://www.linkwynk.com/"+ name} isExternal>linkwynk.com/{ name }</Link>
                 <Box display="inline-block" marginLeft="5px" cursor="pointer" title="Copy" onClick={onCopy}>
-                {!hasCopied ? <FiCopy fontSize="22px"/> : <FiCheck ontSize="22px" />}
+                {!hasCopied ? <FiClipboard fontSize="20px"/> : <FiCheck ontSize="22px" />}
                 </Box>
           </Box>
       </Box>
