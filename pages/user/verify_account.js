@@ -41,7 +41,7 @@ export default function Login() {
     <Flex width="100%" height="100vh" align="center" justifyContent="center">
      {verifyError ?
         <Container>
-            <p>{verifyError}</p>
+            <p>{  }</p>
             <p>You're be redirect to Login page</p>
         </Container> : ""
     }

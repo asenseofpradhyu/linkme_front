@@ -26,8 +26,8 @@ const providers = [
 
         if (user) {
           // axios.defaults.headers.common['Authorization'] = "Bearer "+user.data.token;
-          // console.log(user.data.token);
-          return {status: 'success', data: user.data.token}
+          console.log(user.data);
+          return {status: 'success', data: user.data}
         }
       } catch (e) {
         console.log(e);
@@ -43,14 +43,16 @@ const providers = [
 const callbacks = {
   async jwt(token, user) {
     if (user) {
-      token.accessToken = user.data
+      token.accessToken = user.data.token
+      token.first_login = user.data.first_login
     }
-
+    // console.log(token)
     return token
   },
 
   async session(session, token) {
     session.accessToken = token.accessToken;
+    session.first_login = token.first_login;
     console.log(session);
     return session
   }

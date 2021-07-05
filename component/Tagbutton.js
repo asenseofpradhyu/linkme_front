@@ -9,6 +9,7 @@ const Tagbutton = (props) => {
 
         props.addTag({id:props.dataid, color:color});
         color ? setcolor(false) : setcolor(true);
+        
     }
 
     return ( 

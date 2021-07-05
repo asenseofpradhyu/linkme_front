@@ -14,8 +14,9 @@ import ForgotPassword from './forgot_password';
 
 
 export default function Login() {
-  const router = useRouter()
-  const [loginError, setLoginError] = useState('')
+  const router = useRouter();
+  const [session] = useSession();
+  const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
     if (router.query.error) {
@@ -88,12 +89,20 @@ export default function Login() {
 
         } else if(response.status == 200 && response.ok){
           
-          setTimeout(
-            function() {
-              router.push('username')
+          if(session.first_login == 0){
+            console.log("Link Page..");
+          } else if(session.first_login == 1) {
+            console.log("Categories Page..");
+          } else {
+            setLoginError("Something Went Wrong While Redirecting the Page..!!")
+          }
+
+          // setTimeout(
+          //   function() {
+              // router.push('username')
               // router.push("/admin/dashboard");
-          }.bind(this), 300);
-          console.log(response);
+          // }.bind(this), 300);
+          console.log(session);
         } else {
           setLoginError('Something Went Wrong..!!');
           setSubmitting(false);

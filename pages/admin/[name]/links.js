@@ -96,7 +96,7 @@ const Links = () => {
     return ( 
         <Box className="clearfix">
         <SideNav />
-        <Box w="calc(100% - 164px)"  padding={["24px 50px"]} position="relative" left="164px" >
+        <Box w="calc(100% - 164px)"  padding={["24px 35px"]} position="relative" left="164px" >
            <Box className="links-dashboard">
            <Flex className="row">
     <Box className="col sm-8" h="100%">

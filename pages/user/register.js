@@ -47,7 +47,7 @@ const Register = () => {
         }),
         onSubmit(values) {
           axios.post(API_URL+'register', {
-            name: values.name,
+            username: values.name,
             email: values.email,
             password: values.password
           })

@@ -1,7 +1,9 @@
 import { useSession, signOut, getSession  } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Button, Spinner, Tag, Flex, Box, Heading, Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup'
+import { Button, Spinner, Tag, Flex, Box, FormErrorMessage, Heading, Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
 
 
 
@@ -13,98 +15,106 @@ import Auth from '../../component/Auth';
 import Tagbutton from '../../component/Tagbutton';
 
 
-const Username = ({user}) => {
-
-  const data = [
-    {
-      id: 1,
-      first_name: "Jeanette",
-      last_name: "Penddreth",
-      email: "jpenddreth0@census.gov",
-      gender: "Female",
-      ip_address: "26.58.193.2"
-    },
-    {
-      id: 2,
-      first_name: "Giavani",
-      last_name: "Frediani",
-      email: "gfrediani1@senate.gov",
-      gender: "Male",
-      ip_address: "229.179.4.212"
-    },
-    {
-      id: 3,
-      first_name: "Noell",
-      last_name: "Bea",
-      email: "nbea2@imageshack.us",
-      gender: "Female",
-      ip_address: "180.66.162.255"
-    },
-    {
-      id: 4,
-      first_name: "Willard",
-      last_name: "Valek",
-      email: "wvalek3@vk.com",
-      gender: "Male",
-      ip_address: "67.76.188.26"
-    },
-    {
-      id: 2,
-      first_name: "Giavani",
-      last_name: "Frediani",
-      email: "gfrediani1@senate.gov",
-      gender: "Male",
-      ip_address: "229.179.4.212"
-    },
-    {
-      id: 3,
-      first_name: "Noell",
-      last_name: "Bea",
-      email: "nbea2@imageshack.us",
-      gender: "Female",
-      ip_address: "180.66.162.255"
-    },
-    {
-      id: 4,
-      first_name: "Willard",
-      last_name: "Valek",
-      email: "wvalek3@vk.com",
-      gender: "Male",
-      ip_address: "67.76.188.26"
-    }
-  ];
+const Username = ({categoriesData}) => {
 
   const [session, loading] = useSession();
 	const router = useRouter();
-  const [userData, setUserData] = useState(user);
-  const [tagSelect, setTagSelect] = useState(0);
+  const [tagSelectcount, setTagSelectcount] = useState(0);
+  const [tagSelect, setTagSelect] = useState([]);
+  
+  console.log(tagSelect);
 
+  // Handle Logout..
   const logOut = () => {
-    signOut({redirect: false, callbackUrl: "/"});
-    router.replace("/");
+
+    axios.post(API_URL+'logout', null, {headers: {
+      'Authorization': `Bearer ${session.accessToken}`
+    }})
+    .then(function (response) {
+      signOut({redirect: false, callbackUrl: "/"});
+      router.replace("/");
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
   };
+
+  // Save User Information
+    const {
+        values,
+        handleSubmit,
+        submitCount,
+        getFieldProps,
+        setValues,
+        touched,
+        errors,
+        isSubmitting,
+        setSubmitting,
+        setFieldValue
+      } = useFormik({
+        initialValues: {
+          name:""
+        },
+        validationSchema: Yup.object().shape({
+            name: Yup.string()
+            .required("Required")
+            .matches(/^[A-Za-z\s]{1,}[\.]{0,1}[A-Za-z\s]{0,}$/, "Name is invalid"),
+        }),
+        onSubmit(values) {
+          axios.post(API_URL+'setup_user', {
+            name: values.name,
+            categories: tagSelect
+          }, {
+            headers: {
+              'Authorization': `Bearer ${session.accessToken}`
+            }})
+          .then(function (response) {
+            setTimeout(
+              function() {
+                // router.push('/user/login')
+              }
+              .bind(this),
+              300
+          );
+            setSubmitting(false);
+            console.log(response);
+          })
+          .catch(function (error) {
+            setSubmitting(false);
+            console.log(error);
+          });
+          console.log(tagSelect);
+        }
+      });
+
 
   const toChangePassword = () => {
     router.push("change_password");
   }
 
   const addTag = (value) => {
-    console.log(value);
+    // console.log(value);
     
     if(value.color && value.id){
-      if(tagSelect <= 0){
-      setTagSelect(0);  
+      if(tagSelectcount <= 0){
+          setTagSelectcount(0); 
       } else {
-        setTagSelect(tagSelect - 1);
+        setTagSelectcount(tagSelectcount - 1);
       }
     } else {
-      if(tagSelect == 3){
-
-      } else {
-        setTagSelect(tagSelect + 1);
+      if(tagSelectcount != 3) {
+        setTagSelectcount(tagSelectcount + 1);
       }
     }
-      
+    
+     if(value.color == false){
+       setTagSelect([...tagSelect, value.id]);
+     } else if(value.color == true){
+      setTagSelect(tagSelect.filter(item => item !== value.id));
+     }
+     
   };
 
 
@@ -119,25 +129,29 @@ const Username = ({user}) => {
       <Heading fontSize={["24px","32px","36px","36px"]}>We just need to confirm a few things.</Heading>
     </Center>
   </Box>
-
+<form onSubmit={handleSubmit}>
   <Box w={["100%", "100%", "607px", "607px"]} mt={["20px"]}>
-    <FormControl id="fullname">
+    <FormControl id="fullname" isRequired  isInvalid={ touched["name"] && errors["name"] }>
       <FormLabel fontWeight="700">Tell us your full name</FormLabel>
-      <Input type="text" placeholder="Name" bg="#F5F5F7 !important"/>
+      <Input type="text" 
+      placeholder="Name" 
+      bg="#F5F5F7 !important"
+      {...getFieldProps("name")}/>
+      <FormErrorMessage>{touched["name"] && errors["name"]}</FormErrorMessage>
     </FormControl>
   </Box>
 
-  <Box w={["100%", "100%", "607px", "607px"]} mt={["30px"]}>
-    <Text fontWeight="700">Tell us about yourself</Text>
+  <Box w={["100%", "100%", "607px", "607px"]} mt={["30px"]} position="relative">
+    <Text fontWeight="700" >Tell us about yourself</Text><Text position="absolute" top="-2px" right="calc(100% - 166px)" color="#e53e3e">*</Text>
     <Text display="inline">Select up to 3 categories that best describe your Linkwynk.<br/>
     We'll customise your Linkwynk experience based on what you select.</Text>
-    <Text float="right" display="inline-block">{tagSelect} of 3</Text>
+    <Text float="right" display="inline-block">{tagSelectcount} of 3</Text>
   </Box>
   <Box w={["100%", "100%", "607px", "607px"]} mt={["25px"]}>
-  {Object.values(data).map((type) => {
+  {Object.values(categoriesData.categories).map((type) => {
           return (
-            <Tagbutton addTag={addTag} totalSelect={tagSelect} key={type.id} dataid={type.id}>
-              {type.first_name}
+            <Tagbutton addTag={addTag} totalSelect={tagSelectcount} key={type._id} dataid={type._id}>
+              {type.category}
             </Tagbutton>
           );
         })}
@@ -145,10 +159,14 @@ const Username = ({user}) => {
   </Box>
   <Box w={["100%", "100%", "607px", "607px"]} mt={["30px"]}>
     <Center>
-      <Button className="theme-button" width="120px" type="submit" onClick={logOut}>Logout</Button>
+      <Button className="theme-button" width="120px" type="submit">Next</Button>
+    </Center>
+    <br/>
+    <Center>
+      <Button className="theme-button" width="120px" type="button" onClick={logOut}>Logout</Button>
     </Center>
   </Box>
-
+  </form>
   </Flex>
 </Container>
 
@@ -186,15 +204,17 @@ export async function getServerSideProps(context) {
 
   if(sessionData){
     axios.defaults.headers.common['Authorization'] = "Bearer "+sessionData.accessToken;
-    const {data} = await axios.get(API_URL + 'user');
+    const {data} = await axios.get(API_URL + 'getCategories');
+
     return {
-      props:{user:data}
+      props:{categoriesData:data}
     }
   } else {
     return {
-      props:{user:null}
+      props:{categoriesData:null}
     }
   }
+  
 
 }
 
