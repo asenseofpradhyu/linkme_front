@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { useSession, signOut, getSession  } from 'next-auth/client';
+const axios = require('axios');
 import { Line } from 'react-chartjs-2';
 import { DragDropContext, Droppable, Draggable, resetServerContext } from 'react-beautiful-dnd';
 import { FiChevronDown, FiChevronUp, FiRepeat, FiClipboard, FiEdit2, FiCheck, FiBell, FiShuffle, FiImage, FiZap, FiClock, FiLayers, FiXCircle } from "react-icons/fi";
@@ -10,36 +12,26 @@ import { API_URL } from '../../../_helper/config';
 import Auth from '../../../component/Auth';
 import SideNav from '../../../component/SideNav';
 
-const Links = () => {
+const Links = ({linksData}) => {
 
+    const [session, loading] = useSession();
     const router = useRouter();
     const { name } = router.query;
+    // console.log(linksData.links);
 
-    // Fake Data
-    const data = [
-      {
-        id: 1,
-        first_name: "Jeanette",
-        email: "jpenddreth0@census.gov",
-      },
-      {
-        id: 2,
-        first_name: "Giavani",
-        email: "gfrediani1@senate.gov",
-      },
-      {
-        id: 3,
-        first_name: "Noell",
-        email: "nbea2@imageshack.us",
-      },
-    ];
 
     // States & Effects
     const [analticsDropdown, setAnalticsDropdown] = useState('Weekly');
-    const [linkList, setlinkList] = useState({list:data});
+    const [linkList, setlinkList] = useState({list:linksData.links});
+    const [titleName, setTitleName] = useState('');
+    const [urlName, setUrlName] = useState('');
+    const [linkActiveState, setlinkActiveState] = useState(
+      new Array(linksData.links.length).fill(null).map((_, i)=> (linksData.links[i].active == 1 ? true : false))
+    );
     const { isOpen, onToggle } = useDisclosure();
     const { hasCopied, onCopy } = useClipboard(`https://www.linkwynk.com/${name}`);
-
+    
+    // console.log(linkActiveState);
     
     // Link List Drag
     const onLinkDragEnd = (param) => {
@@ -50,27 +42,161 @@ const Links = () => {
           const [reorderedItem] = items.splice(param.source.index, 1);
           items.splice(param.destination.index, 0, reorderedItem);
           setlinkList({list:items});
-          console.log(linkList);
+          console.log(items);
     };
 
-    // Add Link
+    // Add New Link
     const addLink = () => {
-      const obj = {'id':linkList.list.length+1, 'first_name':"Title", 'email':'url'};
+      const obj = {'title':"Title", 'url':'Url', 'active':0, 'link_image':null};
       linkList.list.unshift(obj);
       setlinkList({list:linkList.list});
-      console.log(linkList);
+      axios.post(API_URL+'save_link', {
+        title: obj.title,
+        link_url: obj.url,
+        acitve: obj.acitve,
+        link_image: obj.link_image
+      }, {headers: {
+        'Authorization': `Bearer ${session.accessToken}`
+      }})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      // linkList.list.unshift(obj);
+      // setlinkList({list:linkList.list});
+      // console.log(linkList);
     };
 
     // Remove Link
     const removeLink = (link_id) => {
-      const removedLinklist = linkList.list.filter(item => item.id !== link_id);
+
+      let config = {
+        headers: {
+          'Authorization': `Bearer ${session.accessToken}`
+        },
+        params:{
+          link_id: link_id
+        },
+      }
+
+      const removedLinklist = linkList.list.filter(item => item._id !== link_id);
       setlinkList({list:removedLinklist});
-      console.log(linkList);
+
+      axios.get(API_URL+'delete_link', config)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+      console.log(session.accessToken);
     };
 
+    const handleChange = (e)=>{
+      setTitleName(e.target.value);
+      console.log("test:- "+e.target.value);
+    };
+
+  // Handle Logout..
+  const logOut = () => {
+
+    axios.post(API_URL+'logout', null, {headers: {
+      'Authorization': `Bearer ${session.accessToken}`
+    }})
+    .then(function (response) {
+      signOut({redirect: false, callbackUrl: "/"});
+      router.replace("/");
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
+  };
 
 
+  // Handle Link Title Value
+  const saveTitleName = (titleName, linkId) => {
+    setTitleName(titleName);
+    const obj = {'switchCase':"title", 'title':titleName, 'linkId':linkId};
+    saveLinkData(obj);
+  }
 
+  // Handle Link Url Value
+  const saveUrlName = (urlName, linkId) => {
+    setUrlName(urlName);
+    const obj = {'switchCase':"url", 'url':urlName, 'linkId':linkId};
+    saveLinkData(obj);
+  }
+
+  // Handle Link Active State
+  const saveLinkActiveState = (state, toggleID, linkId) => {
+
+    var active = state ? 1 : 0;
+    const updatedCheckedState = linkActiveState.map((item, index) =>
+    index === toggleID ? !item : item
+  );
+  setlinkActiveState(updatedCheckedState);
+  // const obj = {'switchCase':"linkActiveState", 'active':!linkActiveState[toggleID], 'linkId':linkId};
+  const obj = {'switchCase':"linkActiveState", 'active':active, 'linkId':linkId};
+  saveLinkData(obj);
+  console.log(obj);
+
+  }
+
+  const saveLinkData = (obj) => {
+      
+      const apiLoad = obj.switchCase;
+      switch(apiLoad) {
+        case "title":
+
+          axios.post(API_URL+'save_link', { link_id:obj.linkId, title:obj.title }, {headers: {
+            'Authorization': `Bearer ${session.accessToken}`
+          }})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          console.log("Switch title");
+          break;
+        case "url":
+
+          axios.post(API_URL+'save_link', { link_id:obj.linkId, link_url:obj.url }, {headers: {
+            'Authorization': `Bearer ${session.accessToken}`
+          }})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          console.log("Switch Url");
+          break;
+          case "linkActiveState":
+
+          axios.post(API_URL+'save_link', { link_id:obj.linkId, active:obj.active }, {headers: {
+            'Authorization': `Bearer ${session.accessToken}`
+          }})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          console.log("Switch Active");
+          break;
+        default:
+          console.log("Default in Switch Case..");
+          // code block
+      }
+  }
 
 
     // Custom Controller for Edit Title & URL
@@ -94,6 +220,8 @@ const Links = () => {
     }
 
     return ( 
+      <>
+      {(!session?.accessToken) ? <Auth/> : 
         <Box className="clearfix">
         <SideNav />
         <Box w="calc(100% - 164px)"  padding={["24px 35px"]} position="relative" left="164px" >
@@ -226,8 +354,8 @@ const Links = () => {
 
 {Object.values(linkList.list).map((type, i) => {
           return (
-                <Draggable key={type.id}
-                draggableId={"draggable-" + type.id} index={i}>
+                <Draggable key={type._id}
+                draggableId={"draggable-" + type._id} index={i}>
 
                 {(provided, snapshot) => (
                   <Box  ref={provided.innerRef} {...provided.draggableProps}>
@@ -246,26 +374,26 @@ const Links = () => {
                               boxSize="64px"
                               borderRadius="12px"
                               objectFit="cover"
-                              src="https://bit.ly/dan-abramov"
-                              alt="link-img"
-                              // fallbackSrc="https://via.placeholder.com/150"
+                              src={ type.photo ? "https://dev.welovecoders.com/storage/app/public/"+type.photo : ''}
+                              alt={type.title}
+                              fallbackSrc={ !type.photo ? "https://via.placeholder.com/64" : ''}
                             />
                         </Box>
                         <Box className="link-detials" display="inline-block" marginLeft="22px">
-                        <Editable defaultValue={type.first_name} isPreviewFocusable={false} className="editable-container">
+                        <Editable defaultValue={type.title} isPreviewFocusable={false} className="editable-container">
                           <EditablePreview className="themeFont" />
-                          <EditableInput/>
+                          <EditableInput value={titleName} onKeyDown={(e) => {e.key === 'Enter'? saveTitleName(e.target.value, type._id) : null}} onBlur={(e) => {saveTitleName(e.target.value, type._id)}}/>
                           <EditableControls />
                         </Editable>
-                        <Editable defaultValue={type.email} isPreviewFocusable={false} className="editable-container">
+                        <Editable defaultValue={type.link_url ? type.link_url : urlName} isPreviewFocusable={false} className="editable-container">
                           <EditablePreview />
-                          <EditableInput/>
+                          <EditableInput value={urlName}  onKeyDown={(e) => {e.key === 'Enter'? saveUrlName(e.target.value, type._id) : null}} onBlur={(e) => {saveUrlName(e.target.value, type._id)}}/>
                           <EditableControls />
                         </Editable>
                         </Box>
                         <Box marginLeft="auto">
                             <Box className="toggle-link">
-                            <Switch id="link-show-hide" size="md" />
+                            <Switch id="link-show-hide" size="md" isChecked={linkActiveState[i]} onChange={(e) => {saveLinkActiveState(e.target.checked, i, type._id)}}/>
                             </Box>
                         </Box>
                         </Flex>
@@ -286,7 +414,7 @@ const Links = () => {
                             <Box display="inline-block" marginRight="18px" fontSize="18px">
                               <FiLayers />
                             </Box>
-                            <Box display="inline-block" fontSize="18px" color="red" cursor="pointer" onClick={() => removeLink(type.id)}>
+                            <Box display="inline-block" fontSize="18px" color="red" cursor="pointer" onClick={() => removeLink(type._id)}>
                               <FiXCircle />
                             </Box>
                           </Box>
@@ -326,7 +454,7 @@ const Links = () => {
               <MenuList minWidth="120px">
                 <MenuItem _focus={{ background:"#0C0B0B", color:"#FFFFFF" }}>Profile</MenuItem>
                 <MenuItem _focus={{ background:"#0C0B0B", color:"#FFFFFF" }}>Setting</MenuItem>
-                <MenuItem _focus={{ background:"#0C0B0B", color:"#FFFFFF" }}>Logout</MenuItem>
+                <MenuItem _focus={{ background:"#0C0B0B", color:"#FFFFFF" }} onClick={logOut}>Logout</MenuItem>
               </MenuList>
             </Menu>
             </Box>
@@ -348,8 +476,30 @@ const Links = () => {
            </Box>
         </Box>
         </Box>
+}
+        </>
      );
 }
 
+
+export async function getServerSideProps(context) {
+
+  const sessionData = await getSession(context);
+
+  if(sessionData){
+    axios.defaults.headers.common['Authorization'] = "Bearer "+sessionData.accessToken;
+    const {data} = await axios.get(API_URL + 'list_links');
+
+    return {
+      props:{linksData:data}
+    }
+  } else {
+    return {
+      props:{linksData:null}
+    }
+  }
+  
+
+}
  
 export default Links;

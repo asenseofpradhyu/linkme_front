@@ -12,10 +12,11 @@ const Auth = () => {
     useEffect(() => {
 
       if((!loading && !session?.accessToken)) {
-        router.push('login');
+        console.log("Redirecting to Login");
+        router.push('/user/login');
       }
 
-      console.log("Test..");
+      console.log("At Login");
 	});
 
 

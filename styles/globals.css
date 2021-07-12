@@ -154,5 +154,6 @@ input:focus, select:focus, textarea:focus{
 .editable-container .chakra-editable__input{
   width: auto;
   padding-left: 10px;
+  padding-right: 10px;
 }
 /* End of Links Page Style */

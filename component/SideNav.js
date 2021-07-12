@@ -5,7 +5,7 @@ import { FiHome, FiUser, FiMessageSquare, FiSettings, FiLogOut, FiInbox } from "
 const SideNav = () => {
 
   const router = useRouter();
-  console.log(router.query);
+  // console.log(router.query);
 
 
 

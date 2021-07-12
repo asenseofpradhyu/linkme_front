@@ -1,13 +1,14 @@
 import { useSession, signOut, getSession  } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+const axios = require('axios');
 import { Formik, useFormik } from 'formik';
-import * as Yup from 'yup'
+import * as Yup from 'yup';
 import { Button, Spinner, Tag, Flex, Box, FormErrorMessage, Heading, Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
 
 
 
-const axios = require('axios');
+
 
 // Local File Imports
 import { API_URL } from '../../_helper/config';
@@ -24,22 +25,7 @@ const Username = ({categoriesData}) => {
   
   console.log(tagSelect);
 
-  // Handle Logout..
-  const logOut = () => {
 
-    axios.post(API_URL+'logout', null, {headers: {
-      'Authorization': `Bearer ${session.accessToken}`
-    }})
-    .then(function (response) {
-      signOut({redirect: false, callbackUrl: "/"});
-      router.replace("/");
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-    
-  };
 
   // Save User Information
     const {
@@ -73,7 +59,7 @@ const Username = ({categoriesData}) => {
           .then(function (response) {
             setTimeout(
               function() {
-                // router.push('/user/login')
+                router.push(`/admin/${session.username}/links`);
               }
               .bind(this),
               300
@@ -160,10 +146,6 @@ const Username = ({categoriesData}) => {
   <Box w={["100%", "100%", "607px", "607px"]} mt={["30px"]}>
     <Center>
       <Button className="theme-button" width="120px" type="submit">Next</Button>
-    </Center>
-    <br/>
-    <Center>
-      <Button className="theme-button" width="120px" type="button" onClick={logOut}>Logout</Button>
     </Center>
   </Box>
   </form>

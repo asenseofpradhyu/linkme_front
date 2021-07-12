@@ -88,14 +88,28 @@ export default function Login() {
           console.log(response);
 
         } else if(response.status == 200 && response.ok){
-          
-          if(session.first_login == 0){
-            console.log("Link Page..");
-          } else if(session.first_login == 1) {
-            console.log("Categories Page..");
-          } else {
-            setLoginError("Something Went Wrong While Redirecting the Page..!!")
-          }
+          console.log(session);
+
+          setTimeout(
+            function() {
+              if(session.first_login == 0){
+                console.log("Link Page..");
+                router.push(`/admin/${session.username}/links`);
+              } else if(session.first_login == 1) {
+                router.push('username')
+              } else {
+                setLoginError("Something Went Wrong While Redirecting the Page..!!")
+              }
+          }.bind(this), 2000);
+
+          // if(session.first_login == 0){
+          //   console.log("Link Page..");
+          //   router.push(`/admin/${session.username}/links`);
+          // } else if(session.first_login == 1) {
+          //   router.push('username')
+          // } else {
+          //   setLoginError("Something Went Wrong While Redirecting the Page..!!")
+          // }
 
           // setTimeout(
           //   function() {

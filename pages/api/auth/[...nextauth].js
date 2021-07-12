@@ -45,6 +45,7 @@ const callbacks = {
     if (user) {
       token.accessToken = user.data.token
       token.first_login = user.data.first_login
+      token.username = user.data.username
     }
     // console.log(token)
     return token
@@ -53,6 +54,7 @@ const callbacks = {
   async session(session, token) {
     session.accessToken = token.accessToken;
     session.first_login = token.first_login;
+    session.username = token.username;
     console.log(session);
     return session
   }
