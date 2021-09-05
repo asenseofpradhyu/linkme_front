@@ -5,19 +5,31 @@ const axios = require('axios');
 import { Line } from 'react-chartjs-2';
 import { DragDropContext, Droppable, Draggable, resetServerContext } from 'react-beautiful-dnd';
 import { FiChevronDown, FiChevronUp, FiRepeat, FiClipboard, FiEdit2, FiCheck, FiBell, FiShuffle, FiImage, FiZap, FiClock, FiLayers, FiXCircle } from "react-icons/fi";
-import { Button, Spinner, Tag, Tooltip, useClipboard, Avatar, Link, Switch, Flex, Box, Spacer, Heading, Image, useDisclosure, useEditableControls, IconButton, Collapse, Tabs, TabList, TabPanels, Tab, TabPanel, Editable, EditableInput, EditablePreview ,Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
+import { Button, Spinner, Tag, Tooltip, useClipboard, Avatar, Link, Switch,Flex, Box, Spacer, Heading, Image, useDisclosure, useEditableControls, IconButton, Collapse, Tabs, TabList, TabPanels, Tab, TabPanel, Editable, EditableInput, EditablePreview ,Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
 
-// Local File Imports
+// Compnent & File Imports
 import { API_URL } from '../../../_helper/config';
 import Auth from '../../../component/Auth';
 import SideNav from '../../../component/SideNav';
+import LinkPreview from '../../../component/LinkPreview';
 
 const Links = ({linksData}) => {
+
+
+  // if(!linksData){
+  //   return <Auth/>;
+  // }
 
     const [session, loading] = useSession();
     const router = useRouter();
     const { name } = router.query;
     // console.log(linksData.links);
+
+    if(loading){
+      console.log(setInterval(function(){ return "Loading.."; }, 1000));
+    } else {
+      console.log("Not Loading..");
+    }
 
 
     // States & Effects
@@ -106,7 +118,7 @@ const Links = ({linksData}) => {
       'Authorization': `Bearer ${session.accessToken}`
     }})
     .then(function (response) {
-      signOut({redirect: false, callbackUrl: "/"});
+      signOut({redirect: true, callbackUrl: "/"});
       router.replace("/");
       console.log(response.data);
     })
@@ -221,13 +233,13 @@ const Links = ({linksData}) => {
 
     return ( 
       <>
-      {(!session?.accessToken) ? <Auth/> : 
+      {(!linksData) ? <Auth/> : 
         <Box className="clearfix">
         <SideNav />
-        <Box w="calc(100% - 164px)"  padding={["24px 35px"]} position="relative" left="164px" >
-           <Box className="links-dashboard">
-           <Flex className="row">
-    <Box className="col sm-8" h="100%">
+        <Box width={{ base: "100%", md: "calc(100% - 164px)"}}  padding={["24px 35px"]} position="relative" left={{ base: "0", md: "164px"}}>
+           <Box className="links-dashboard" width="100%">
+           <Flex className="row" justifyContent="space-between" width="100%">
+    <Box flexShrink="0" flexBasis={{ base: "100%", md: "70%"}} h="100%">
             <Box className="dashboard-greeting" bg="#F5F5F7" width="100%" borderRadius="14px" position="relative" padding="46px 0px" marginTop="31px">
                <Box display="inline-block" marginLeft="30px">
                   <Heading fontSize={["24px","32px","36px","36px"]} isTruncated maxWidth="300px">Hello { name }!</Heading>
@@ -438,7 +450,7 @@ const Links = ({linksData}) => {
             {/* End of Links Drag and Drop Section */}
         </Box>
        </Box>
-    <Box className="col sm-4" h="100%">
+    <Box h="100%" display={{ base: "none", md: "block" }}>
       <Box className="link-preview-container" marginTop="31px">
           <Box className="notification-profile-dropdown" display="flex" alignItems="center" justifyContent="flex-end">
             <Box className="notification-bell" display="inline-block" boxSize="25px" marginRight="20px">
@@ -459,10 +471,8 @@ const Links = ({linksData}) => {
             </Menu>
             </Box>
           </Box>
-          <Box className="linkwynk-preview" display="flex" justifyContent="center" marginTop="40px">
-                <Box className="mobile-design-frame" width="350px" height="calc(100vh - 25vh)"  border="solid #0C0B0B" borderWidth="8px 10px 8px 10px" borderRadius="40px">
-
-                </Box>
+          <Box>
+            <LinkPreview />
           </Box>
           <Box className="user-linkwynk-link" marginTop="30px" justifyContent="center" display="flex" alignItems="center">
                 <Text display="inline-block" fontWeight="700" fontSize="20px" marginRight="5px">My Linkwynk:</Text><Link fontSize="20px" href={"https://www.linkwynk.com/"+ name} isExternal>linkwynk.com/{ name }</Link>
@@ -488,7 +498,9 @@ export async function getServerSideProps(context) {
 
   if(sessionData){
     axios.defaults.headers.common['Authorization'] = "Bearer "+sessionData.accessToken;
-    const {data} = await axios.get(API_URL + 'list_links');
+    const {data} = await axios.get(API_URL + 'list_links', { params :{
+      username:sessionData.username
+    }});
 
     return {
       props:{linksData:data}

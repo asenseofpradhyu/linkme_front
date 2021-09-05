@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import { Box, Heading, Container, Center, Link, FormControl, Text, Input, Button, FormErrorMessage, Flex } from "@chakra-ui/react";
 import { Formik, useFormik } from 'formik';
 import { useState, useEffect } from 'react'
-import { signIn, useSession } from 'next-auth/client'
+import { signIn, useSession, getSession } from 'next-auth/client'
 const axios = require('axios');
 
 // Local File Imports
@@ -15,7 +15,7 @@ import ForgotPassword from './forgot_password';
 
 export default function Login() {
   const router = useRouter();
-  const [session] = useSession();
+  // const [session] = useSession();
   const [loginError, setLoginError] = useState('');
 
   useEffect(() => {
@@ -76,11 +76,11 @@ export default function Login() {
           const res = signIn('credentials', {
                 email,
                 password,
-                callbackUrl: `${window.location.origin}/username`,
+                callbackUrl: `${window.location.origin}/user/login`,
                 redirect: false,
           })
 
-      res.then(function (response){
+      res.then(async function (response){
         if(response.error){
 
           setLoginError(response.error);
@@ -88,8 +88,8 @@ export default function Login() {
           console.log(response);
 
         } else if(response.status == 200 && response.ok){
-          console.log(session);
-
+          const session = await getSession();
+          console.log("Session:-  "+JSON.stringify(session));
           setTimeout(
             function() {
               if(session.first_login == 0){
@@ -98,9 +98,10 @@ export default function Login() {
               } else if(session.first_login == 1) {
                 router.push('username')
               } else {
-                setLoginError("Something Went Wrong While Redirecting the Page..!!")
+                setLoginError("Something Went Wrong While Redirecting the Page..!!");
+                setSubmitting(false);
               }
-          }.bind(this), 2000);
+          }.bind(this), 100);
 
           // if(session.first_login == 0){
           //   console.log("Link Page..");

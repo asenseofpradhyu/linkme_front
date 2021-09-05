@@ -41,7 +41,7 @@ a {
   clear: both;
   display: table;
 }
-.row{
+/* .row{
   -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin-right: -15px;
@@ -65,7 +65,7 @@ a {
   -ms-flex: 0 0 33.333333%;
   flex: 0 0 33.333333%;
   max-width: 33.333333%;
-}
+} */
 /* End of Global Style */
 
 /* Start of Font Theme Style*/
