@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { Box, Stack, HStack, Image, VStack, Link, useDisclosure, Drawer,
+import { Box, Stack, HStack, Image, VStack, Link, Text, useDisclosure, Drawer,
   DrawerBody,
   DrawerFooter,
   DrawerHeader,
@@ -29,7 +29,7 @@ const SideNav = () => {
 
     return ( 
       <>
-      <Box display={{ base: "block", md: "none" }} onClick={handleToggle}>
+      <Box display={{ base: "block", md: "block", lg:"none" }} onClick={handleToggle}>
         <TiThMenu />
       </Box>
 
@@ -37,14 +37,16 @@ const SideNav = () => {
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
+        
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent width="200px !important">
           <DrawerCloseButton />
-          <DrawerHeader>Create your account</DrawerHeader>
+          <DrawerHeader>Menu</DrawerHeader>
 
           <DrawerBody>
-            <Box>Test</Box>
+            <Box onClick={() => navigateUser('links')} display="flex" alignItems="center" marginBottom="15px" cursor="pointer"><FiHome color="#0C0B0B" fontSize="22px" /><Text marginRight="5px">Links</Text></Box>
+            <Box onClick={() => navigateUser('settings')} display="flex" alignItems="center" marginBottom="15px" cursor="pointer"><FiInbox color="#0C0B0B" fontSize="22px" /><Text marginRight="5px">Settings</Text></Box>
           </DrawerBody>
 
           <DrawerFooter>
@@ -59,7 +61,7 @@ const SideNav = () => {
         top="24px"
         left="32px"
         bottom="24px"
-        display={{ base: "none", md: "block" }}
+        display={{ base: "none", md: "none", lg:"block" }}
       >
         <VStack 
         bg="#0C0B0B"

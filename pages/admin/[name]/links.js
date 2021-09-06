@@ -236,10 +236,10 @@ const Links = ({linksData}) => {
       {(!linksData) ? <Auth/> : 
         <Box className="clearfix">
         <SideNav />
-        <Box width={{ base: "100%", md: "calc(100% - 164px)"}}  padding={["24px 35px"]} position="relative" left={{ base: "0", md: "164px"}}>
+        <Box width={{ base: "100%", md: "100%", lg: "calc(100% - 164px)"}}  padding={["24px 35px"]} position="relative" left={{ base: "0", md: "0", lg: "164px"}}>
            <Box className="links-dashboard" width="100%">
            <Flex className="row" justifyContent="space-between" width="100%">
-    <Box flexShrink="0" flexBasis={{ base: "100%", md: "70%"}} h="100%">
+    <Box flexShrink="0" flexBasis={{ base: "100%", md:"100%", lg: "70%"}} h="100%">
             <Box className="dashboard-greeting" bg="#F5F5F7" width="100%" borderRadius="14px" position="relative" padding="46px 0px" marginTop="31px">
                <Box display="inline-block" marginLeft="30px">
                   <Heading fontSize={["24px","32px","36px","36px"]} isTruncated maxWidth="300px">Hello { name }!</Heading>
@@ -450,7 +450,7 @@ const Links = ({linksData}) => {
             {/* End of Links Drag and Drop Section */}
         </Box>
        </Box>
-    <Box h="100%" display={{ base: "none", md: "block" }}>
+    <Box h="100%" display={{ base: "none",  md: "none", lg: "block" }}>
       <Box className="link-preview-container" marginTop="31px">
           <Box className="notification-profile-dropdown" display="flex" alignItems="center" justifyContent="flex-end">
             <Box className="notification-bell" display="inline-block" boxSize="25px" marginRight="20px">
