@@ -222,11 +222,11 @@ const Links = ({linksData}) => {
   
       return isEditing ? (
         <Box display="inline-block">
-          <IconButton height="auto" width="auto"  bg="transparent" _hover={{ backgroundColor:"none" }} _active={{ backgroundColor:"none" }} _focus={{ backgroundColor:"none" }} icon={<FiCheck />} {...getSubmitButtonProps()} />
+          <IconButton height="auto" width="auto" verticalAlign="initial"  bg="transparent" _hover={{ backgroundColor:"none" }} _active={{ backgroundColor:"none" }} _focus={{ backgroundColor:"none" }} icon={<FiCheck />} {...getSubmitButtonProps()} />
         </Box>
       ) : (
         <Box display="inline-block">
-          <IconButton height="auto" width="auto" className="themeFont" bg="transparent" _hover={{ backgroundColor:"none" }} _active={{ backgroundColor:"none" }} _focus={{ backgroundColor:"none" }} icon={<FiEdit2 />} {...getEditButtonProps()} />
+          <IconButton height="auto" width="auto" verticalAlign="initial" className="themeFont" bg="transparent" _hover={{ backgroundColor:"none" }} _active={{ backgroundColor:"none" }} _focus={{ backgroundColor:"none" }} icon={<FiEdit2 />} {...getEditButtonProps()} />
         </Box>
       )
     }
@@ -236,37 +236,38 @@ const Links = ({linksData}) => {
       {(!linksData) ? <Auth/> : 
         <Box className="clearfix">
         <SideNav />
-        <Box width={{ base: "100%", md: "100%", lg: "calc(100% - 164px)"}}  padding={["24px 35px"]} position="relative" left={{ base: "0", md: "0", lg: "164px"}}>
+        <Box width={{ base: "100%", md: "100%", lg: "calc(100% - 164px)"}}  padding={{ base: "15px", md: "15px", lg: "24px 35px"}} position="relative" left={{ base: "0", md: "0", lg: "164px"}}>
            <Box className="links-dashboard" width="100%">
            <Flex className="row" justifyContent="space-between" width="100%">
     <Box flexShrink="0" flexBasis={{ base: "100%", md:"100%", lg: "70%"}} h="100%">
-            <Box className="dashboard-greeting" bg="#F5F5F7" width="100%" borderRadius="14px" position="relative" padding="46px 0px" marginTop="31px">
-               <Box display="inline-block" marginLeft="30px">
-                  <Heading fontSize={["24px","32px","36px","36px"]} isTruncated maxWidth="300px">Hello { name }!</Heading>
-                  <Text fontSize={["16px"]} title="New Text">It’s good to see you again.</Text>
+            <Box className="dashboard-greeting" bg="#F5F5F7" width="100%" borderRadius="14px" position="relative" padding={{ base: "20px 0px", md: "20px 0px", lg: "46px 0px"}} marginTop={{ base: "15px", md: "15px", lg: "31px"}}>
+               <Box display="inline-block" marginLeft={{ base: "18px", md: "18px", lg: "30px"}}>
+                  <Heading fontSize={["22px","32px","36px","36px"]} isTruncated maxWidth="300px">Hello { name }!</Heading>
+                  <Text fontSize={{ base: "14px", md: "16px", lg: "16px"}} title="New Text">It’s good to see you again.</Text>
                </Box>
-               <Box position="absolute" right="70px" bottom="0">
-                  <Image src="/img/boy.svg"alt="Greetings from linkwynk" />
+               <Box position="absolute" right={{ base: "20px", md:"20px", lg:"70px"}} bottom="0">
+                  <Image src="/img/boy.svg"alt="Greetings from linkwynk" width={{ base: "100px"}}/>
                </Box>
             </Box>
             <Box className="links-analytics">
-                  <Box bg="#F5F5F7" width="100%" display="flex" alignItems="center" justifyContent="space-between" borderRadius="14px" marginTop="16px" padding="16px 30px">
+                  <Box bg="#F5F5F7" width="100%" display="flex" alignItems="center" justifyContent="space-between" borderRadius="14px" marginTop="16px" padding={{ base: "15px 18px", md: "15px 18px", lg: "16px 30px"}}>
                      <Box display="inline-block">
                         <Heading fontSize="16px">Lifetime Analytics:</Heading>
                         <Text fontSize={["13px"]} display="inline-block" marginRight="16px">Views: <b>0</b></Text>
                         <Text fontSize={["13px"]} display="inline-block">Click: <b>0</b></Text>
                      </Box>
                      <Box display="inline-block">
-                     <Button className="theme-button" width="120px" fontSize="13px" type="button" onClick={onToggle} rightIcon={ isOpen ? <FiChevronUp /> : <FiChevronDown />}>View More</Button>
+                     <Button className="theme-button" width="120px" fontSize="13px" type="button" display={{ base: "none", md: "none", lg:"inline-flex" }} onClick={onToggle} rightIcon={ isOpen ? <FiChevronUp /> : <FiChevronDown />}>View More</Button>
+                     <Button className="theme-button" width="auto" fontSize="13px" padding="0px" display={{ base: "inline-flex", md: "inline-flex", lg:"none" }} type="button" onClick={onToggle}>{ isOpen ? <FiChevronUp /> : <FiChevronDown /> }</Button>
                      </Box>
                   </Box>
                   <Collapse in={isOpen} animateOpacity>
                   <Box mt="17px" className="analtics-tabs">
-                  <Heading fontSize="24px" paddingLeft="30px">Your Analytics:</Heading>
-                  <Tabs variant="unstyled" paddingLeft="14px" isLazy>
+                  <Heading fontSize={{ base: "18px", md: "18px", lg: "24px"}} paddingLeft={{ base: "20px", md: "20px", lg: "30px"}}>Your Analytics:</Heading>
+                  <Tabs variant="unstyled" paddingLeft={{ base: "5px", md: "5px", lg: "14px"}} isLazy>
                     <TabList>
-                      <Tab _selected={{ color: "#0C0B0B", bg: "transparent", opacity:"1" }}>Views</Tab>
-                      <Tab _selected={{ color: "#0C0B0B", bg: "transparent", opacity:"1" }}>Clicks</Tab>
+                      <Tab _selected={{ color: "#0C0B0B", bg: "transparent", opacity:"1" }} fontSize={{ base: "14px", md: "14px", lg: "16px"}}>Views</Tab>
+                      <Tab _selected={{ color: "#0C0B0B", bg: "transparent", opacity:"1" }} fontSize={{ base: "14px", md: "14px", lg: "16px"}}>Clicks</Tab>
                       <Box marginLeft="auto">
                       <Menu placement="bottom-end">
                           {({ isOpen }) => (
@@ -352,11 +353,11 @@ const Links = ({linksData}) => {
                   </Collapse>
             </Box>
         <Box className="add-links-section">
-            <Center marginTop="40px"><Button onClick={addLink} className="theme-button add-link-btn" width="130px" padding="18px 40px" type="button">Add Links</Button></Center>
+            <Center marginTop={{ base: "20px",  md: "20px", lg: "40px" }}><Button onClick={addLink} className="theme-button" width={{ base: "100px",  md: "100px", lg: "130px" }} padding="18px 40px" type="button">Add Links</Button></Center>
 
             {/* Start of Links Drag and Drop Section */}
 
-            <Box className="draggable-container" marginTop="40px">
+            <Box className="draggable-container" marginTop={{ base: "20px",  md: "20px", lg: "40px" }}>
 
             <DragDropContext  onDragEnd={onLinkDragEnd}>
             <Droppable droppableId="droppable-1">
@@ -374,7 +375,7 @@ const Links = ({linksData}) => {
                     
                 <Box className="links" bg="#F5F5F7" borderRadius="14px" style={{ ...provided.draggableProps, boxShadow:snapshot.isDragging ? "0 0 .4rem #666" : "none"}}>
                   <Flex>
-                  <Box  {...provided.dragHandleProps} className="draggable-handle" padding="50px 16px" borderRight="2px solid rgba(12, 11, 11, 0.2)">
+                  <Box  {...provided.dragHandleProps} className="draggable-handle" display="flex" padding={{ base: "0px 13px",  md: "0px 13px", lg: "0px 16px" }} borderRight="2px solid rgba(12, 11, 11, 0.2)">
                   <Center transform="rotate(90deg)">
                     <FiRepeat fontSize="20px"/>
                   </Center>
@@ -391,14 +392,14 @@ const Links = ({linksData}) => {
                               fallbackSrc={ !type.photo ? "https://via.placeholder.com/64" : ''}
                             />
                         </Box>
-                        <Box className="link-detials" display="inline-block" marginLeft="22px">
+                        <Box className="link-detials" display="inline-block" marginLeft={{ base: "10px",  md: "10px", lg: "22px" }}>
                         <Editable defaultValue={type.title} isPreviewFocusable={false} className="editable-container">
-                          <EditablePreview className="themeFont" />
+                          <EditablePreview className="themeFont" fontSize={{ base: "14px",  md: "14px", lg: "16px" }}/>
                           <EditableInput value={titleName} onKeyDown={(e) => {e.key === 'Enter'? saveTitleName(e.target.value, type._id) : null}} onBlur={(e) => {saveTitleName(e.target.value, type._id)}}/>
                           <EditableControls />
                         </Editable>
                         <Editable defaultValue={type.link_url ? type.link_url : urlName} isPreviewFocusable={false} className="editable-container">
-                          <EditablePreview />
+                          <EditablePreview fontSize={{ base: "14px",  md: "14px", lg: "16px" }}/>
                           <EditableInput value={urlName}  onKeyDown={(e) => {e.key === 'Enter'? saveUrlName(e.target.value, type._id) : null}} onBlur={(e) => {saveUrlName(e.target.value, type._id)}}/>
                           <EditableControls />
                         </Editable>

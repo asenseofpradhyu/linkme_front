@@ -29,18 +29,18 @@ const SideNav = () => {
 
     return ( 
       <>
-      <Box display={{ base: "block", md: "block", lg:"none" }} onClick={handleToggle}>
-        <TiThMenu />
+      <Box display={{ base: "inline-block", md: "inline-block", lg:"none" }} marginTop="15px" marginLeft="15px" onClick={handleToggle}>
+        <TiThMenu fontSize="24px" />
       </Box>
 
       <Drawer
         isOpen={isOpen}
         placement="left"
         onClose={onClose}
-        
+        placement="top"
       >
         <DrawerOverlay />
-        <DrawerContent width="200px !important">
+        <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Menu</DrawerHeader>
 
