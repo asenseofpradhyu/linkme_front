@@ -1,11 +1,15 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import {useDropzone} from 'react-dropzone';
+import ReactCrop from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import { useSession, signOut, getSession  } from 'next-auth/client';
 const axios = require('axios');
+var FormData = require('form-data');
 import { Line } from 'react-chartjs-2';
 import { DragDropContext, Droppable, Draggable, resetServerContext } from 'react-beautiful-dnd';
 import { FiChevronDown, FiChevronUp, FiRepeat, FiClipboard, FiEdit2, FiCheck, FiBell, FiShuffle, FiImage, FiZap, FiClock, FiLayers, FiXCircle } from "react-icons/fi";
-import { Button, Spinner, Tag, Tooltip, useClipboard, Avatar, Link, Switch,Flex, Box, Spacer, Heading, Image, useDisclosure, useEditableControls, IconButton, Collapse, Tabs, TabList, TabPanels, Tab, TabPanel, Editable, EditableInput, EditablePreview ,Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider } from "@chakra-ui/react";
+import { Button, Spinner, Tag, Tooltip, useClipboard, Avatar, Link, Switch,Flex, Box, Spacer, Heading, Image, useDisclosure, useEditableControls, IconButton, Collapse, Tabs, TabList, TabPanels, Tab, TabPanel, Editable, EditableInput, EditablePreview ,Container, Center, FormControl, FormLabel, Input, Text, Menu, MenuButton, MenuList, MenuItem, MenuItemOption, MenuGroup, MenuOptionGroup, MenuIcon, MenuCommand, MenuDivider, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 
 // Compnent & File Imports
 import { API_URL } from '../../../_helper/config';
@@ -14,15 +18,42 @@ import SideNav from '../../../component/SideNav';
 import LinkPreview from '../../../component/LinkPreview';
 
 const Links = ({linksData}) => {
+  
 
 
   // if(!linksData){
   //   return <Auth/>;
   // }
 
+
+  const [imgFiles, setimgFiles] = useState([]);
+  const {
+    acceptedFiles,
+    fileRejections,
+    getRootProps,
+    getInputProps,
+    inputRef
+  } = useDropzone({
+    accept: 'image/jpeg, image/jpg, image/png',
+    onDrop: acceptedFiles => {
+      setimgFiles(acceptedFiles.map(file => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      })));
+    }
+  });
+
+  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+   
+      errors.map(e => (
+          <p style={{color:"red"}}>Invalid File Type</p>
+        ))
+  
+  ));
+
     const [session, loading] = useSession();
     const router = useRouter();
     const { name } = router.query;
+    const { isOpen:isOpenFileUpload, onOpen:onOpenFileUpload, onClose:onCloseFileUpload } = useDisclosure()
     // console.log(linksData.links);
 
     if(loading){
@@ -37,41 +68,92 @@ const Links = ({linksData}) => {
     const [linkList, setlinkList] = useState({list:linksData.links});
     const [titleName, setTitleName] = useState('');
     const [urlName, setUrlName] = useState('');
+    const [imgModal, setimgModal] = useState({imgModalState:false, linkId:''});
+    
+    const [crop, setCrop] = useState({ aspect: 1 / 1 });
     const [linkActiveState, setlinkActiveState] = useState(
       new Array(linksData.links.length).fill(null).map((_, i)=> (linksData.links[i].active == 1 ? true : false))
     );
     const { isOpen, onToggle } = useDisclosure();
     const { hasCopied, onCopy } = useClipboard(`https://www.linkwynk.com/${name}`);
     
-    // console.log(linkActiveState);
+    console.log(linkList);
+    console.log(linkActiveState);
+
+
+    // Handle Image Upload Modal
+    const openImgModal = (linkID) => {
+      
+      setimgModal({imgModalState:true, linkId:linkID});
+      // console.log(imgModal);
+    }
+
+    const closeImgModal = () => {
+      acceptedFiles.length = fileRejections.length = 0;
+      acceptedFiles.splice(0, acceptedFiles.length);
+      fileRejections.splice(0, fileRejections.length);
+      // inputRef.current.value = '';
+      setimgFiles([]);
+      setimgModal({imgModalState:false, linkId:''});
+      console.log("Img Modal Close");
+    }
+
+
+
+
+
+
     
     // Link List Drag
     const onLinkDragEnd = (param) => {
 
+      console.log(linkList);
           if (!param.destination) return;
 
-          const items = Array.from(linkList.list);
-          const [reorderedItem] = items.splice(param.source.index, 1);
-          items.splice(param.destination.index, 0, reorderedItem);
-          setlinkList({list:items});
-          console.log(items);
+          const linkItems = Array.from(linkList.list);
+          const linksState = Array.from(linkActiveState);
+          const [reorderedItem] = linkItems.splice(param.source.index, 1);
+          const [linksStateItem] = linksState.splice(param.source.index, 1);
+          linkItems.splice(param.destination.index, 0, reorderedItem);
+          linksState.splice(param.destination.index, 0, linksStateItem);
+          setlinkList({list:linkItems});
+          setlinkActiveState(linksState);
+          
+          let ids = linkItems.map(value => value._id);
+
+          axios.post(API_URL+'sort_links', {
+            link_ids: ids
+          }, {headers: {
+            'Authorization': `Bearer ${session.accessToken}`
+          }})
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+          console.log(ids);
     };
 
     // Add New Link
     const addLink = () => {
-      const obj = {'title':"Title", 'url':'Url', 'active':0, 'link_image':null};
+      const obj = {'title':"Title", 'url':'Url', 'active':0, 'link_image':null, 'username':session.username};
       linkList.list.unshift(obj);
+      linkActiveState.unshift(false);
       setlinkList({list:linkList.list});
+      setlinkActiveState(linkActiveState);
       axios.post(API_URL+'save_link', {
         title: obj.title,
         link_url: obj.url,
         acitve: obj.acitve,
-        link_image: obj.link_image
+        link_image: obj.link_image,
+        username:obj.username
       }, {headers: {
         'Authorization': `Bearer ${session.accessToken}`
       }})
-      .then(function (response) {
-        console.log(response);
+      .then(function (response) {        
+        linkList.list[0]._id = response.data.link_id;
+        console.log(response.data.link_id);
       })
       .catch(function (error) {
         console.log(error);
@@ -81,20 +163,25 @@ const Links = ({linksData}) => {
       // console.log(linkList);
     };
 
+
+
     // Remove Link
-    const removeLink = (link_id) => {
+    const removeLink = (link_id, indexValue) => {
 
       let config = {
         headers: {
           'Authorization': `Bearer ${session.accessToken}`
         },
         params:{
-          link_id: link_id
+          link_id: link_id,
+          username:session.username
         },
       }
 
       const removedLinklist = linkList.list.filter(item => item._id !== link_id);
+      const removedLinkState = linkActiveState.filter((item, index) => index !== indexValue);
       setlinkList({list:removedLinklist});
+      setlinkActiveState(removedLinkState);
 
       axios.get(API_URL+'delete_link', config)
       .then(function (response) {
@@ -106,7 +193,7 @@ const Links = ({linksData}) => {
       console.log(session.accessToken);
     };
 
-    const handleChange = (e)=>{
+    const handleChangeTest = (e)=>{
       setTitleName(e.target.value);
       console.log("test:- "+e.target.value);
     };
@@ -143,6 +230,25 @@ const Links = ({linksData}) => {
     saveLinkData(obj);
   }
 
+  // Handle Link Image File
+  const saveImgFile = () => {
+    let imgFileData;
+    imgFiles.map(file => (
+      imgFileData = file
+      // console.log(file.name)
+    ));
+    const obj = {'switchCase':"linkImg", 'img':imgFileData, 'linkId':imgModal.linkId, 'username':session.username};
+    
+    saveLinkData(obj);
+    // console.log(imgFiles);
+    acceptedFiles.length = fileRejections.length = 0;
+    acceptedFiles.splice(0, acceptedFiles.length);
+    fileRejections.splice(0, fileRejections.length);
+    setimgFiles([]);
+    setimgModal({imgModalState:false});
+    console.log(imgModal);
+  }
+
   // Handle Link Active State
   const saveLinkActiveState = (state, toggleID, linkId) => {
 
@@ -150,8 +256,8 @@ const Links = ({linksData}) => {
     const updatedCheckedState = linkActiveState.map((item, index) =>
     index === toggleID ? !item : item
   );
+  console.log(toggleID);
   setlinkActiveState(updatedCheckedState);
-  // const obj = {'switchCase':"linkActiveState", 'active':!linkActiveState[toggleID], 'linkId':linkId};
   const obj = {'switchCase':"linkActiveState", 'active':active, 'linkId':linkId};
   saveLinkData(obj);
   console.log(obj);
@@ -204,6 +310,36 @@ const Links = ({linksData}) => {
 
           console.log("Switch Active");
           break;
+          case "linkImg":
+
+          let imgData = new FormData();
+          imgData.append("link_image", obj.img, obj.img.name);
+          imgData.append("link_id", obj.linkId);
+          imgData.append("username", session.username);
+          console.log(obj.img);
+          const headers = {
+            'Authorization': `Bearer ${session.accessToken}`,
+            'Content-Type': `multipart/form-data`
+          }
+          axios.post(API_URL+'save_link', imgData, {headers: headers})
+          .then(function (response) {
+            
+              let updateImage = linkList.list.map(item => 
+                {
+                  if (item._id == obj.linkId){
+                    return {...item, photo: response.data.link_image}; 
+                  }
+                  return item;
+                });
+
+            setlinkList({list: updateImage});
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+          console.log("Switch Link Image");
+          break;
         default:
           console.log("Default in Switch Case..");
           // code block
@@ -246,7 +382,7 @@ const Links = ({linksData}) => {
                   <Text fontSize={{ base: "14px", md: "16px", lg: "16px"}} title="New Text">It’s good to see you again.</Text>
                </Box>
                <Box position="absolute" right={{ base: "20px", md:"20px", lg:"70px"}} bottom="0">
-                  <Image src="/img/boy.svg"alt="Greetings from linkwynk" width={{ base: "100px"}}/>
+                  <Image src="/img/boy.svg"alt="Greetings from linkwynk" width={{ base: "100px", md: "auto", lg: "auto" }}/>
                </Box>
             </Box>
             <Box className="links-analytics">
@@ -395,7 +531,7 @@ const Links = ({linksData}) => {
                         <Box className="link-detials" display="inline-block" marginLeft={{ base: "10px",  md: "10px", lg: "22px" }}>
                         <Editable defaultValue={type.title} isPreviewFocusable={false} className="editable-container">
                           <EditablePreview className="themeFont" fontSize={{ base: "14px",  md: "14px", lg: "16px" }}/>
-                          <EditableInput value={titleName} onKeyDown={(e) => {e.key === 'Enter'? saveTitleName(e.target.value, type._id) : null}} onBlur={(e) => {saveTitleName(e.target.value, type._id)}}/>
+                          <EditableInput value={titleName}  onKeyDown={(e) => {e.key === 'Enter'? saveTitleName(e.target.value, type._id) : null}} onBlur={(e) => {saveTitleName(e.target.value, type._id)}}/>
                           <EditableControls />
                         </Editable>
                         <Editable defaultValue={type.link_url ? type.link_url : urlName} isPreviewFocusable={false} className="editable-container">
@@ -410,26 +546,32 @@ const Links = ({linksData}) => {
                             </Box>
                         </Box>
                         </Flex>
-                        <Flex className="icon-links-control" marginTop="15px" justifyContent="flex-end">
+                        <Flex className="icon-links-control" marginTop="5px" justifyContent="flex-end">
                           <Box>
-                            <Box display="inline-block" marginRight="18px" fontSize="18px">
-                              <FiShuffle  />
+                            {/* <Box display="inline-block" cursor="pointer" marginRight="18px" fontSize="18px">
+                              <FiShuffle title="link Name"  />
+                            </Box> */}
+                            <Tooltip hasArrow label="Image" bg="#0C0B0B" color="#FFFFFF" borderRadius="8px">
+                            <Box display="inline-block" onClick={() => openImgModal(type._id)} cursor="pointer" marginRight="18px" fontSize="18px">
+                              <FiImage title="link Thumbnail"/> 
                             </Box>
-                            <Box display="inline-block" marginRight="18px" fontSize="18px">
-                              <FiImage />
+                            </Tooltip>
+                            {/* <Box display="inline-block" cursor="pointer" marginRight="18px" fontSize="18px">
+                              <FiZap title="link Thumbnail" />
+                            </Box> */}
+                            <Tooltip hasArrow label="Schedule" bg="#0C0B0B" color="#FFFFFF" borderRadius="8px">
+                            <Box display="inline-block" cursor="pointer" marginRight="18px" fontSize="18px">
+                              <FiClock title="link Schedule"/>
                             </Box>
-                            <Box display="inline-block" marginRight="18px" fontSize="18px">
-                              <FiZap />
-                            </Box>
-                            <Box display="inline-block" marginRight="18px" fontSize="18px">
-                              <FiClock />
-                            </Box>
-                            <Box display="inline-block" marginRight="18px" fontSize="18px">
+                            </Tooltip>
+                            <Box display="inline-block" cursor="pointer" marginRight="18px" fontSize="18px">
                               <FiLayers />
                             </Box>
-                            <Box display="inline-block" fontSize="18px" color="red" cursor="pointer" onClick={() => removeLink(type._id)}>
-                              <FiXCircle />
+                            <Tooltip hasArrow label="Delete" bg="#0C0B0B" color="#FFFFFF" borderRadius="8px">
+                            <Box display="inline-block" fontSize="18px" color="red" cursor="pointer" onClick={() => removeLink(type._id, i)}>
+                              <FiXCircle title="Remove Link"/>
                             </Box>
+                            </Tooltip>
                           </Box>
                         </Flex>
                     </Box>
@@ -476,7 +618,7 @@ const Links = ({linksData}) => {
             <LinkPreview />
           </Box>
           <Box className="user-linkwynk-link" marginTop="30px" justifyContent="center" display="flex" alignItems="center">
-                <Text display="inline-block" fontWeight="700" fontSize="20px" marginRight="5px">My Linkwynk:</Text><Link fontSize="20px" href={"https://www.linkwynk.com/"+ name} isExternal>linkwynk.com/{ name }</Link>
+                <Text display="inline-block" fontWeight="700" fontSize={["14px","16px","18px","20px"]} marginRight="5px">My Linkwynk:</Text><Link fontSize={["14px","16px","18px","20px"]} href={"https://www.linkwynk.com/"+ name} isExternal>linkwynk.com/{ name }</Link>
                 <Box display="inline-block" marginLeft="5px" cursor="pointer" title="Copy" onClick={onCopy}>
                 {!hasCopied ? <FiClipboard fontSize="20px"/> : <FiCheck ontSize="22px" />}
                 </Box>
@@ -486,6 +628,44 @@ const Links = ({linksData}) => {
   </Flex>
            </Box>
         </Box>
+        <Modal size="xl" isOpen={imgModal.imgModalState} onClose={closeImgModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Upload Image</ModalHeader>
+          <ModalBody>
+          <section className="linkImg-upload-container">
+          {/* {linkList.list.filter((data) => {
+          if(data._id == imgModal.linkId){
+            if(data.photo){
+              console.log(data.photo);
+              <img src={"https://dev.welovecoders.com/storage/app/public/"+data.photo }/>
+            }
+          }
+        })} */}
+            {imgFiles.length == 0 ? <div {...getRootProps({ className: 'dropzone' })} >
+        <input {...getInputProps()} />
+        <p>Drag 'n' drop some files here, or click to select files</p>
+        <em>(Only *.jpeg and *.png images will be accepted)</em>
+      </div> : <aside>
+        
+        {imgFiles.map(file => (
+          <ReactCrop src={file.preview} crop={crop} onChange={newCrop => setCrop(newCrop)} />
+        ))}
+        
+      </aside>}
+      {fileRejectionItems}
+      
+    </section>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button className="theme-button" mr={3} onClick={closeImgModal}>
+              Close
+            </Button>
+            <Button className="theme-button" onClick={saveImgFile}>Save</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
         </Box>
 }
         </>

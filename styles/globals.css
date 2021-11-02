@@ -153,7 +153,34 @@ input:focus, select:focus, textarea:focus{
 }
 .editable-container .chakra-editable__input{
   width: auto;
-  padding-left: 10px;
+  /* padding-left: 10px; */
   padding-right: 10px;
+  background: transparent !important;
+  border: none !important;
+}
+.editable-container .chakra-editable__input:focus{
+  box-shadow: none !important;
+}
+.linkImg-upload-container{
+  height: 500px;
 }
 /* End of Links Page Style */
+
+/* Start of File Uploader Drag and Drop Style*/
+.dropzone{
+  flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: #0d0b0b;
+    border-style: dashed;
+    background-color: #fafafa;
+    color: rgb(13 11 11 / 70%);
+    outline: none;
+    height: 100%;
+    justify-content: center;
+}
+/* End of File Uploader Drag and Drop Style*/
